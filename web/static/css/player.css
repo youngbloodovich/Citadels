@@ -1,0 +1,125 @@
+body { font-size: 16px; }
+#player-app { min-height: 100vh; padding: 12px; max-width: 480px; margin: 0 auto; }
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #16213e;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+.player-header .name { font-size: 20px; font-weight: bold; }
+.player-header .info { display: flex; gap: 12px; font-size: 16px; }
+.section { margin: 12px 0; }
+.section-title { font-size: 14px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+.action-buttons button { flex: 1; min-width: 120px; padding: 14px; font-size: 15px; }
+.hand-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.hand-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #16213e;
+    border-radius: 10px;
+    border: 2px solid #333;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.hand-card:hover { border-color: #e0a030; }
+.hand-card .cost { font-weight: bold; }
+.hand-card.selected { border-color: #e0a030; background: #1e2d4e; }
+.city-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.city-card {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #fff;
+}
+.draft-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.draft-choice {
+    padding: 14px;
+    background: #16213e;
+    border: 2px solid #333;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: center;
+    transition: all 0.2s;
+}
+.draft-choice:hover { border-color: #e0a030; background: #1e2d4e; }
+.draw-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.draw-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px;
+    background: #16213e;
+    border: 2px solid #333;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.draw-card:hover { border-color: #e0a030; }
+.turn-indicator {
+    text-align: center;
+    padding: 12px;
+    background: #2d1a00;
+    border: 2px solid #e0a030;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #e0a030;
+    margin: 12px 0;
+}
+.waiting { text-align: center; padding: 20px; color: #888; font-size: 18px; }
+.ability-section {
+    margin: 12px 0;
+    padding: 12px;
+    background: #1e1e3e;
+    border-radius: 12px;
+    border: 1px solid #9b59b6;
+}
+.target-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+.target-option {
+    padding: 10px;
+    background: #16213e;
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+.target-option:hover { border-color: #9b59b6; }
+.scores-section { margin-top: 20px; }
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+.score-row.winner { color: #e0a030; font-weight: bold; }

@@ -1,0 +1,44 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+h1, h2, h3 { color: #e0a030; }
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #e0a030;
+    color: #1a1a2e;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+button:hover { background: #f0b040; }
+button:disabled { background: #555; color: #999; cursor: default; }
+input {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: #16213e;
+    color: #eee;
+    font-size: 16px;
+}
+input:focus { outline: none; border-color: #e0a030; }
+.card {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 8px;
+    border: 1px solid #333;
+}
+.gold { color: #ffd700; }
+.color-noble { background: #c9a227; }
+.color-religious { background: #4a90d9; }
+.color-trade { background: #45a049; }
+.color-military { background: #d9534f; }
+.color-special { background: #9b59b6; }
+.hidden { display: none !important; }
