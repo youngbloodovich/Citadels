@@ -81,6 +81,11 @@ body { font-size: 16px; }
     cursor: pointer;
 }
 .draw-card:hover { border-color: #e0a030; }
+.hand-card.color-noble, .draw-card.color-noble { border-left: 4px solid #c9a227; }
+.hand-card.color-religious, .draw-card.color-religious { border-left: 4px solid #4a90d9; }
+.hand-card.color-trade, .draw-card.color-trade { border-left: 4px solid #45a049; }
+.hand-card.color-military, .draw-card.color-military { border-left: 4px solid #d9534f; }
+.hand-card.color-special, .draw-card.color-special { border-left: 4px solid #9b59b6; }
 .turn-indicator {
     text-align: center;
     padding: 12px;

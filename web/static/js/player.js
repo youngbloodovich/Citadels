@@ -142,8 +142,8 @@
                 <div class="section-title">${t('choose_card_keep')}</div>
                 <div class="draw-choices">
                     ${state.drawn_cards.map((d, i) => `
-                        <div class="draw-card" data-idx="${i}">
-                            <span>${t(d.name)}</span>
+                        <div class="draw-card ${colorClass(d.color)}" data-idx="${i}">
+                            <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
                             <span class="cost">${d.cost} ${t('gold')}</span>
                         </div>
                     `).join('')}
@@ -183,7 +183,7 @@
                     <div class="section-title">${t('build_district')}</div>
                     <div class="hand-cards">
                         ${state.hand.map(d => `
-                            <div class="hand-card buildable" data-name="${d.name}">
+                            <div class="hand-card buildable ${colorClass(d.color)}" data-name="${d.name}">
                                 <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
                                 <span class="cost">${d.cost} ${t('gold')}</span>
                             </div>
@@ -202,7 +202,7 @@
                     <div class="section-title">${t('hand')}</div>
                     <div class="hand-cards">
                         ${state.hand.map(d => `
-                            <div class="hand-card">
+                            <div class="hand-card ${colorClass(d.color)}">
                                 <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
                                 <span class="cost">${d.cost} ${t('gold')}</span>
                             </div>
@@ -330,8 +330,14 @@
 
     function colorLabel(color) {
         const names = { 1: 'Noble', 2: 'Religious', 3: 'Trade', 4: 'Military', 5: 'Special' };
-        const key = names[color] || '';
+        const key = names[color] || color || '';
         return key ? t(key) : '';
+    }
+
+    function colorClass(color) {
+        const numMap = { 1: 'color-noble', 2: 'color-religious', 3: 'color-trade', 4: 'color-military', 5: 'color-special' };
+        const strMap = { Noble: 'color-noble', Religious: 'color-religious', Trade: 'color-trade', Military: 'color-military', Special: 'color-special' };
+        return numMap[color] || strMap[color] || '';
     }
 
     function translateTarget(target) {
