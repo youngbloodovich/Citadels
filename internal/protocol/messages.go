@@ -30,8 +30,9 @@ const (
 	MsgBuild           = "build"
 	MsgAbility         = "ability"
 	MsgEndTurn         = "end_turn"
-	MsgLabDiscard      = "lab_discard"
-	MsgSmithyDraw      = "smithy_draw"
+	MsgLabDiscard        = "lab_discard"
+	MsgSmithyDraw        = "smithy_draw"
+	MsgGraveyardRespond  = "graveyard_respond"
 )
 
 // LobbyUpdate is sent to all clients when lobby state changes.

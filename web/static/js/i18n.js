@@ -98,6 +98,13 @@
             'choose_cards_discard': 'Select cards to discard',
             'discard_and_draw': 'Discard & Draw',
             'your_characters': 'Your Characters',
+            'lab_btn': 'Laboratory',
+            'lab_select_card': 'Select a card to discard for 1 gold',
+            'lab_cancel': 'Cancel',
+            'smithy_btn': 'Smithy (2g → 3 cards)',
+            'graveyard_prompt': 'Graveyard: Pay 1 gold to take {district} into your hand?',
+            'graveyard_accept': 'Accept',
+            'graveyard_decline': 'Decline',
 
             // UI — deck
             'deck': 'Deck',
@@ -132,7 +139,7 @@
             'ev_game_over': 'Game Over!',
 
             // District effects
-            'effect_Haunted City': 'You may build duplicate copies of this district',
+            'effect_Haunted City': 'Counts as any color for the 5-color bonus at end of game',
             'effect_Keep': 'Cannot be destroyed by the Warlord',
             'effect_Laboratory': 'Discard 1 card from hand → gain 1 gold',
             'effect_Smithy': 'Pay 2 gold → draw 3 cards',
@@ -248,6 +255,13 @@
             'choose_cards_discard': 'Выберите карты для сброса',
             'discard_and_draw': 'Сбросить и взять',
             'your_characters': 'Ваши персонажи',
+            'lab_btn': 'Лаборатория',
+            'lab_select_card': 'Выберите карту для сброса за 1 золото',
+            'lab_cancel': 'Отмена',
+            'smithy_btn': 'Кузня (2з → 3 карты)',
+            'graveyard_prompt': 'Кладбище: Заплатить 1 золото, чтобы взять {district} в руку?',
+            'graveyard_accept': 'Принять',
+            'graveyard_decline': 'Отклонить',
 
             // UI — deck
             'deck': 'Колода',
@@ -282,7 +296,7 @@
             'ev_game_over': 'Игра окончена!',
 
             // District effects
-            'effect_Haunted City': 'Можно строить дубликаты этого района',
+            'effect_Haunted City': 'Считается любым цветом для бонуса за 5 цветов при подсчёте очков',
             'effect_Keep': 'Не может быть разрушен Кондотьером',
             'effect_Laboratory': 'Сбросить 1 карту из руки → получить 1 золото',
             'effect_Smithy': 'Заплатить 2 золота → взять 3 карты',

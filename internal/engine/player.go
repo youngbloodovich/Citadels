@@ -13,9 +13,11 @@ type Player struct {
 	// Per-turn state (reset each character turn)
 	Murdered   bool `json:"-"` // killed by assassin this round
 	Robbed     bool `json:"-"` // robbed by thief this round
-	BuiltCount int  `json:"-"` // districts built this turn
-	TookAction bool `json:"-"` // took gold/drew cards this turn
+	BuiltCount  int  `json:"-"` // districts built this turn
+	TookAction  bool `json:"-"` // took gold/drew cards this turn
 	UsedAbility bool `json:"-"` // used character ability this turn
+	UsedLab     bool `json:"-"` // used Laboratory this turn
+	UsedSmithy  bool `json:"-"` // used Smithy this turn
 }
 
 func NewPlayer(id, name string) *Player {

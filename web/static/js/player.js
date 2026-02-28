@@ -10,6 +10,7 @@
     let joined = false;
     let magicianMode = null; // 'swap_hand' | 'discard_draw' | null
     let selectedDiscardIndices = new Set();
+    let labMode = false;
 
     if (!gameID) {
         document.body.innerHTML = '<div class="container"><h1>' + t('no_game_id') + '</h1></div>';
@@ -109,6 +110,11 @@
             selectedDiscardIndices.clear();
         }
 
+        // Reset lab mode when no longer available
+        if (!state.can_use_lab) {
+            labMode = false;
+        }
+
         const me = (state.players || []).find(p => p.id === playerID);
         const gold = me ? me.gold : 0;
         const handSize = state.hand ? state.hand.length : 0;
@@ -173,6 +179,12 @@
             if (state.can_use_ability && state.valid_targets && state.valid_targets.length > 0) {
                 content += `<button id="btn-ability">${t('use_ability')}</button>`;
             }
+            if (state.can_use_lab) {
+                content += `<button id="btn-lab" class="${labMode ? 'active' : ''}">${labMode ? t('lab_cancel') : t('lab_btn')}</button>`;
+            }
+            if (state.can_use_smithy) {
+                content += `<button id="btn-smithy">${t('smithy_btn')}</button>`;
+            }
             content += `<button id="btn-end">${t('end_turn')}</button>`;
             content += '</div>';
 
@@ -214,8 +226,24 @@
                 </div>`;
             }
 
+            // Laboratory: select card to discard
+            if (labMode && state.hand && state.hand.length > 0) {
+                content += `<div class="section">
+                    <div class="section-title">${t('lab_select_card')}</div>
+                    <div class="hand-cards">
+                        ${state.hand.map(d => `
+                            <div class="hand-card lab-discard-card ${colorClass(d.color)}" data-name="${d.name}">
+                                <div><span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}</div>
+                                <span class="cost">${d.cost} ${t('gold')}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
             // Hand (buildable)
-            if (state.can_build && state.hand && state.hand.length > 0) {
+            if (!labMode && state.can_build && state.hand && state.hand.length > 0) {
                 content += `<div class="section">
                     <div class="section-title">${t('build_district')}</div>
                     <div class="hand-cards">
@@ -234,7 +262,7 @@
         }
 
         // Hand (non-turn view)
-        if (!(state.is_my_turn && state.phase === 'PlayerTurn' && state.can_build)) {
+        if (!(state.is_my_turn && state.phase === 'PlayerTurn' && (state.can_build || labMode))) {
             if (state.hand && state.hand.length > 0) {
                 content += `<div class="section">
                     <div class="section-title">${t('hand')}</div>
@@ -249,6 +277,17 @@
                     </div>
                 </div>`;
             }
+        }
+
+        // Graveyard prompt (shown regardless of whose turn it is)
+        if (state.graveyard_choice) {
+            content += `<div class="section graveyard-prompt" style="background:#2d1b3d;border:2px solid #9b59b6;border-radius:8px;padding:12px;margin:8px 0;">
+                <div style="margin-bottom:8px;">${t('graveyard_prompt', { district: t(state.graveyard_choice.district_name) })}</div>
+                <div style="display:flex;gap:8px;">
+                    <button id="btn-graveyard-accept" style="flex:1;background:#27ae60;">${t('graveyard_accept')}</button>
+                    <button id="btn-graveyard-decline" style="flex:1;background:#c0392b;">${t('graveyard_decline')}</button>
+                </div>
+            </div>`;
         }
 
         // City
@@ -366,6 +405,45 @@
                     magicianMode = null;
                     selectedDiscardIndices.clear();
                 }
+            };
+        }
+
+        // Lab button
+        const btnLab = document.getElementById('btn-lab');
+        if (btnLab) {
+            btnLab.onclick = () => {
+                labMode = !labMode;
+                render();
+            };
+        }
+
+        // Lab card discard
+        document.querySelectorAll('.lab-discard-card').forEach(el => {
+            el.onclick = () => {
+                ws.send('lab_discard', { district_name: el.dataset.name });
+                labMode = false;
+            };
+        });
+
+        // Smithy button
+        const btnSmithy = document.getElementById('btn-smithy');
+        if (btnSmithy) {
+            btnSmithy.onclick = () => {
+                ws.send('smithy_draw', {});
+            };
+        }
+
+        // Graveyard buttons
+        const btnGraveyardAccept = document.getElementById('btn-graveyard-accept');
+        if (btnGraveyardAccept) {
+            btnGraveyardAccept.onclick = () => {
+                ws.send('graveyard_respond', { extra_data: 'accept' });
+            };
+        }
+        const btnGraveyardDecline = document.getElementById('btn-graveyard-decline');
+        if (btnGraveyardDecline) {
+            btnGraveyardDecline.onclick = () => {
+                ws.send('graveyard_respond', { extra_data: 'decline' });
             };
         }
 

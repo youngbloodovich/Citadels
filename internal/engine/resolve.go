@@ -91,6 +91,8 @@ func (g *Game) CallCharacter(role CharacterRole) []Event {
 	owner.BuiltCount = 0
 	owner.TookAction = false
 	owner.UsedAbility = false
+	owner.UsedLab = false
+	owner.UsedSmithy = false
 	g.Phase = PhasePlayerTurn
 
 	events = append(events, Event{

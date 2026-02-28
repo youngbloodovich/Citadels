@@ -99,6 +99,8 @@ func (g *Game) startDraft() []Event {
 		p.BuiltCount = 0
 		p.TookAction = false
 		p.UsedAbility = false
+		p.UsedLab = false
+		p.UsedSmithy = false
 	}
 
 	g.Draft = SetupDraft(g.Players)
@@ -137,6 +139,8 @@ func (g *Game) Apply(playerID string, action Action) ([]Event, error) {
 		return g.applyLabDiscard(playerID, action)
 	case ActionSmithyDraw:
 		return g.applySmithyDraw(playerID)
+	case ActionGraveyardRespond:
+		return g.applyGraveyardRespond(playerID, action)
 	default:
 		return nil, ErrInvalidAction
 	}
@@ -443,6 +447,7 @@ func (g *Game) applyEndTurn(playerID string) ([]Event, error) {
 	}
 
 	g.CurrentTurnPlayer = ""
+	g.PendingGraveyard = nil
 	g.Phase = PhaseResolution
 
 	// Resolve next character
@@ -461,12 +466,16 @@ func (g *Game) applyLabDiscard(playerID string, action Action) ([]Event, error) 
 	if !p.CityHas("Laboratory") {
 		return nil, fmt.Errorf("you don't have Laboratory")
 	}
+	if p.UsedLab {
+		return nil, fmt.Errorf("already used Laboratory this turn")
+	}
 	card, found := p.RemoveFromHand(action.DistrictName)
 	if !found {
 		return nil, fmt.Errorf("card %s not in hand", action.DistrictName)
 	}
 	g.Deck.Return([]District{card})
 	p.Gold++
+	p.UsedLab = true
 	return []Event{
 		{Type: EventAbilityUsed, Player: playerID, Data: map[string]interface{}{
 			"ability": "laboratory", "discarded": card.Name,
@@ -485,15 +494,53 @@ func (g *Game) applySmithyDraw(playerID string) ([]Event, error) {
 	if !p.CityHas("Smithy") {
 		return nil, fmt.Errorf("you don't have Smithy")
 	}
+	if p.UsedSmithy {
+		return nil, fmt.Errorf("already used Smithy this turn")
+	}
 	if p.Gold < 2 {
 		return nil, ErrNotEnoughGold
 	}
 	p.Gold -= 2
+	p.UsedSmithy = true
 	drawn := g.Deck.Draw(3)
 	p.Hand = append(p.Hand, drawn...)
 	return []Event{
 		{Type: EventAbilityUsed, Player: playerID, Data: map[string]interface{}{
 			"ability": "smithy", "cards_drawn": len(drawn),
+		}},
+	}, nil
+}
+
+func (g *Game) applyGraveyardRespond(playerID string, action Action) ([]Event, error) {
+	if g.PendingGraveyard == nil {
+		return nil, fmt.Errorf("no pending graveyard choice")
+	}
+	if g.PendingGraveyard.PlayerID != playerID {
+		return nil, fmt.Errorf("graveyard choice is not for you")
+	}
+
+	pending := g.PendingGraveyard
+
+	if action.ExtraData == "accept" {
+		p := g.GetPlayer(playerID)
+		if p.Gold < 1 {
+			return nil, ErrNotEnoughGold
+		}
+		g.PendingGraveyard = nil
+		p.Gold--
+		p.Hand = append(p.Hand, pending.District)
+		return []Event{
+			{Type: EventAbilityUsed, Player: playerID, Data: map[string]interface{}{
+				"ability": "graveyard", "district": pending.District.Name, "action": "accept",
+			}},
+		}, nil
+	}
+
+	// Decline
+	g.PendingGraveyard = nil
+	return []Event{
+		{Type: EventAbilityUsed, Player: playerID, Data: map[string]interface{}{
+			"ability": "graveyard", "district": pending.District.Name, "action": "decline",
 		}},
 	}, nil
 }
@@ -591,9 +638,18 @@ type PlayerViewData struct {
 	CanUseAbility bool          `json:"can_use_ability"`
 	CanTakeAction bool          `json:"can_take_action"`
 	DraftChoices []string       `json:"draft_choices,omitempty"`
-	DrawnCards   []District     `json:"drawn_cards,omitempty"`
-	KeepCount    int            `json:"keep_count,omitempty"`
-	ValidTargets []string       `json:"valid_targets,omitempty"`
+	DrawnCards      []District          `json:"drawn_cards,omitempty"`
+	KeepCount       int                 `json:"keep_count,omitempty"`
+	ValidTargets    []string            `json:"valid_targets,omitempty"`
+	CanUseLab       bool                `json:"can_use_lab,omitempty"`
+	CanUseSmithy    bool                `json:"can_use_smithy,omitempty"`
+	GraveyardChoice *GraveyardChoiceView `json:"graveyard_choice,omitempty"`
+}
+
+// GraveyardChoiceView is sent to the player who can use Graveyard.
+type GraveyardChoiceView struct {
+	DistrictName string `json:"district_name"`
+	DistrictCost int    `json:"district_cost"`
 }
 
 func (g *Game) ViewFor(playerID string) PlayerViewData {
@@ -639,6 +695,24 @@ func (g *Game) ViewFor(playerID string) PlayerViewData {
 	if g.Phase == PhaseDrawChoice && g.CurrentTurnPlayer == playerID {
 		pv.DrawnCards = g.DrawnCards
 		pv.KeepCount = g.DrawCount
+	}
+
+	// Laboratory / Smithy (available during own turn)
+	if pv.IsMyTurn && g.Phase == PhasePlayerTurn {
+		if p.CityHas("Laboratory") && !p.UsedLab && len(p.Hand) > 0 {
+			pv.CanUseLab = true
+		}
+		if p.CityHas("Smithy") && !p.UsedSmithy && p.Gold >= 2 {
+			pv.CanUseSmithy = true
+		}
+	}
+
+	// Graveyard choice (shown regardless of whose turn it is)
+	if g.PendingGraveyard != nil && g.PendingGraveyard.PlayerID == playerID {
+		pv.GraveyardChoice = &GraveyardChoiceView{
+			DistrictName: g.PendingGraveyard.District.Name,
+			DistrictCost: g.PendingGraveyard.District.Cost,
+		}
 	}
 
 	return pv
