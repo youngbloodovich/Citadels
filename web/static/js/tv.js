@@ -3,7 +3,7 @@
     const params = new URLSearchParams(location.search);
     const gameID = params.get('game');
     if (!gameID) {
-        document.body.innerHTML = '<div class="container"><h1>No game ID</h1><p><a href="/api/create">Create a new game</a></p></div>';
+        document.body.innerHTML = '<div class="container"><h1>' + t('no_game_id') + '</h1><p><a href="/api/create">Create a new game</a></p></div>';
         return;
     }
 
@@ -22,18 +22,24 @@
         () => console.log('TV disconnected')
     );
 
+    function rerender() {
+        if (state) renderGame();
+        else renderLobby({ players: [], started: false });
+    }
+
     function renderLobby(data) {
         if (data.started && state) { renderGame(); return; }
         const app = document.getElementById('tv-app');
         app.innerHTML = `
             <div class="tv-header">
-                <h1>Citadels</h1>
-                <span class="phase-badge">Lobby</span>
+                <h1>${t('citadels')}</h1>
+                <span class="phase-badge">${t('lobby')}</span>
+                ${langSwitcherHTML()}
             </div>
             <div class="qr-section">
-                <h2>Scan to join!</h2>
+                <h2>${t('scan_to_join')}</h2>
                 <img src="/api/qr?game=${gameID}" alt="QR Code" width="256" height="256">
-                <p style="font-size:16px;color:#888;margin-top:8px;">Game: ${gameID}</p>
+                <p style="font-size:16px;color:#888;margin-top:8px;">${t('game_label')}: ${gameID}</p>
             </div>
             <div class="lobby-players">
                 ${(data.players || []).map(p => `
@@ -42,8 +48,9 @@
                     </div>
                 `).join('')}
             </div>
-            <p style="text-align:center;color:#888;">${(data.players||[]).length} player(s) joined</p>
+            <p style="text-align:center;color:#888;">${(data.players||[]).length} ${t('players_joined')}</p>
         `;
+        bindLangSwitcher(rerender);
     }
 
     function renderGame() {
@@ -59,11 +66,11 @@
         if (state.phase === 'DraftPick') {
             draftHTML = `
                 <div class="draft-info">
-                    <h2>Draft Phase - Round ${state.round}</h2>
+                    <h2>${t('draft_phase')} - ${t('round')} ${state.round}</h2>
                     ${state.draft_face_up && state.draft_face_up.length > 0 ?
-                        `<div class="face-up">Face up: ${state.draft_face_up.join(', ')}</div>` : ''}
-                    <p>Available: ${state.draft_available} characters</p>
-                    ${state.draft_picker ? `<p style="font-size:24px;margin-top:12px;">Picking: <strong>${state.draft_picker}</strong></p>` : ''}
+                        `<div class="face-up">${t('face_up')}: ${state.draft_face_up.map(c => t(c)).join(', ')}</div>` : ''}
+                    <p>${t('available_chars')}: ${state.draft_available} ${t('characters')}</p>
+                    ${state.draft_picker ? `<p style="font-size:24px;margin-top:12px;">${t('picking')}: <strong>${state.draft_picker}</strong></p>` : ''}
                 </div>
             `;
         }
@@ -72,16 +79,17 @@
         if (state.phase === 'PlayerTurn' || state.phase === 'DrawChoice' || state.phase === 'Ability') {
             callHTML = `
                 <div class="call-banner">
-                    ${state.current_role || ''} ${state.current_turn ? `- ${state.current_turn}'s turn` : ''}
+                    ${state.current_role ? t(state.current_role) : ''} ${state.current_turn ? `- ${state.current_turn}` : ''}
                 </div>
             `;
         }
 
         app.innerHTML = `
             <div class="tv-header">
-                <h1>Citadels</h1>
-                <span class="phase-badge">${state.phase} - Round ${state.round}</span>
-                <span style="color:#888">Deck: ${state.deck_size}</span>
+                <h1>${t('citadels')}</h1>
+                <span class="phase-badge">${t(state.phase)} - ${t('round')} ${state.round}</span>
+                <span style="color:#888">${t('deck')}: ${state.deck_size}</span>
+                ${langSwitcherHTML()}
             </div>
             ${draftHTML}
             ${callHTML}
@@ -90,7 +98,7 @@
                     ${(state.players || []).map(p => renderPlayerCard(p)).join('')}
                 </div>
                 <div class="event-log">
-                    <div class="event-log-title">Event Log</div>
+                    <div class="event-log-title">${t('event_log')}</div>
                     <div class="event-log-list" id="event-log-list">
                         ${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}
                     </div>
@@ -99,6 +107,7 @@
         `;
         const logList = document.getElementById('event-log-list');
         if (logList) logList.scrollTop = logList.scrollHeight;
+        bindLangSwitcher(rerender);
     }
 
     function renderPlayerCard(p) {
@@ -108,13 +117,13 @@
             <div class="player-card ${isActive ? 'active' : ''}">
                 <div class="name ${p.has_crown ? 'crown' : ''}">${p.name}</div>
                 <div class="stats">
-                    <span class="gold">${p.gold} gold</span>
-                    <span>${p.hand_size} cards</span>
+                    <span class="gold">${p.gold} ${t('gold')}</span>
+                    <span>${p.hand_size} ${t('cards')}</span>
                 </div>
                 ${p.revealed_roles && p.revealed_roles.length > 0 ?
-                    `<div style="color:#9b59b6;margin:4px 0;">${p.revealed_roles.join(', ')}</div>` : ''}
+                    `<div style="color:#9b59b6;margin:4px 0;">${p.revealed_roles.map(r => t(r)).join(', ')}</div>` : ''}
                 <div class="city-districts">
-                    ${(p.city || []).map(d => `<span class="district-chip ${colorMap[d.color] || ''}">${d.name} (${d.cost})</span>`).join('')}
+                    ${(p.city || []).map(d => `<span class="district-chip ${colorMap[d.color] || ''}">${t(d.name)} (${d.cost})</span>`).join('')}
                 </div>
             </div>
         `;
@@ -125,11 +134,12 @@
         scores.sort((a, b) => b.total - a.total);
         app.innerHTML = `
             <div class="tv-header">
-                <h1>Game Over!</h1>
+                <h1>${t('game_over')}</h1>
+                ${langSwitcherHTML()}
             </div>
             <table class="scores-table">
                 <thead>
-                    <tr><th>Player</th><th>Districts</th><th>Colors</th><th>Complete</th><th>Special</th><th>Total</th></tr>
+                    <tr><th>${t('player')}</th><th>${t('districts')}</th><th>${t('colors')}</th><th>${t('complete')}</th><th>${t('special')}</th><th>${t('total')}</th></tr>
                 </thead>
                 <tbody>
                     ${scores.map(s => `
@@ -145,6 +155,7 @@
                 </tbody>
             </table>
         `;
+        bindLangSwitcher(rerender);
     }
 
     function handleEvent(ev) {
@@ -156,7 +167,7 @@
         }
     }
 
-    function playerName(id) {
+    function pName(id) {
         if (!state || !state.players) return id;
         const p = state.players.find(p => p.id === id);
         return p ? p.name : id;
@@ -166,35 +177,35 @@
         const d = ev.data || {};
         switch (ev.type) {
             case 'draft_start':
-                return { text: `Round ${d.round} — Draft started`, css: 'ev-round' };
+                return { text: t('ev_draft_start', { round: d.round }), css: 'ev-round' };
             case 'draft_pick':
-                return { text: `${playerName(ev.player)} picked a character`, css: 'ev-draft' };
+                return { text: t('ev_draft_pick', { player: pName(ev.player) }), css: 'ev-draft' };
             case 'draft_done':
-                return { text: 'Draft complete — Resolution begins', css: 'ev-round' };
+                return { text: t('ev_draft_done'), css: 'ev-round' };
             case 'character_call':
-                return { text: `Calling #${d.number} ${d.role}...`, css: 'ev-call' };
+                return { text: t('ev_character_call', { number: d.number, role: t(d.role) }), css: 'ev-call' };
             case 'murdered':
-                return { text: `${d.role} (${playerName(ev.player)}) was murdered!`, css: 'ev-danger' };
+                return { text: t('ev_murdered', { role: t(d.role), player: pName(ev.player) }), css: 'ev-danger' };
             case 'robbed':
-                return { text: `${d.role} (${playerName(ev.player)}) was robbed of ${d.stolen} gold by ${d.thief}!`, css: 'ev-danger' };
+                return { text: t('ev_robbed', { role: t(d.role), player: pName(ev.player), stolen: d.stolen, thief: t(d.thief) }), css: 'ev-danger' };
             case 'gold_taken':
-                return { text: `${playerName(ev.player)} took ${d.gold} gold`, css: 'ev-action' };
+                return { text: t('ev_gold_taken', { player: pName(ev.player), gold: d.gold }), css: 'ev-action' };
             case 'cards_drawn':
-                return { text: `${playerName(ev.player)} drew cards`, css: 'ev-action' };
+                return { text: t('ev_cards_drawn', { player: pName(ev.player) }), css: 'ev-action' };
             case 'district_built':
-                return { text: `${playerName(ev.player)} built ${d.district} (${d.cost}g)`, css: 'ev-build' };
+                return { text: t('ev_district_built', { player: pName(ev.player), district: t(d.district), cost: d.cost }), css: 'ev-build' };
             case 'ability_used':
-                return { text: `${playerName(ev.player)} used ${d.ability}`, css: 'ev-ability' };
+                return { text: t('ev_ability_used', { player: pName(ev.player), ability: t(d.ability) }), css: 'ev-ability' };
             case 'gold_collected':
-                return { text: `${playerName(ev.player)} collected ${d.count} gold (${d.color})`, css: 'ev-action' };
+                return { text: t('ev_gold_collected', { player: pName(ev.player), count: d.count, color: t(d.color) }), css: 'ev-action' };
             case 'crown_passed':
-                return { text: `Crown passed to ${playerName(ev.player)}`, css: 'ev-round' };
+                return { text: t('ev_crown_passed', { player: pName(ev.player) }), css: 'ev-round' };
             case 'turn_end':
-                return { text: `${playerName(ev.player)} (${d.role}) ended turn`, css: 'ev-minor' };
+                return { text: t('ev_turn_end', { player: pName(ev.player), role: t(d.role) }), css: 'ev-minor' };
             case 'round_end':
-                return { text: `Round ${d.round} ended`, css: 'ev-round' };
+                return { text: t('ev_round_end', { round: d.round }), css: 'ev-round' };
             case 'game_over':
-                return { text: 'Game Over!', css: 'ev-round' };
+                return { text: t('ev_game_over'), css: 'ev-round' };
             default:
                 return null;
         }

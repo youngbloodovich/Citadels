@@ -42,3 +42,7 @@ input:focus { outline: none; border-color: #e0a030; }
 .color-military { background: #d9534f; }
 .color-special { background: #9b59b6; }
 .hidden { display: none !important; }
+.lang-switcher { display: inline-block; font-size: 14px; color: #888; margin-left: 12px; }
+.lang-option { cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.lang-option:hover { color: #eee; }
+.lang-option.active { color: #e0a030; font-weight: bold; }

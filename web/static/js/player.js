@@ -10,7 +10,7 @@
     let joined = false;
 
     if (!gameID) {
-        document.body.innerHTML = '<div class="container"><h1>No game ID</h1></div>';
+        document.body.innerHTML = '<div class="container"><h1>' + t('no_game_id') + '</h1></div>';
         return;
     }
 
@@ -49,11 +49,12 @@
     function renderJoinForm(app) {
         app.innerHTML = `
             <div style="padding:40px 16px;text-align:center;">
-                <h1 style="margin-bottom:24px;">Citadels</h1>
-                <p style="color:#888;margin-bottom:24px;">Game: ${gameID}</p>
-                <input id="name-input" type="text" placeholder="Your name" value="${playerName}"
+                <h1 style="margin-bottom:24px;">${t('citadels')}</h1>
+                ${langSwitcherHTML()}
+                <p style="color:#888;margin-bottom:24px;">${t('game_label')}: ${gameID}</p>
+                <input id="name-input" type="text" placeholder="${t('your_name')}" value="${playerName}"
                     style="width:100%;max-width:300px;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
-                <button id="join-btn">Join Game</button>
+                <button id="join-btn">${t('join_game')}</button>
             </div>
         `;
         document.getElementById('join-btn').onclick = () => {
@@ -65,6 +66,7 @@
             ws.send('join', { player_id: playerID, name: playerName });
             render();
         };
+        bindLangSwitcher(render);
     }
 
     function renderLobby(app) {
@@ -73,14 +75,15 @@
         const amReady = me ? me.ready : false;
         app.innerHTML = `
             <div style="padding:20px;text-align:center;">
-                <h2>Waiting for players...</h2>
+                ${langSwitcherHTML()}
+                <h2>${t('waiting_for_players')}</h2>
                 <div style="margin:20px 0;">
                     ${players.map(p => `<div class="card" style="display:inline-block;margin:4px;">
                         ${p.name} ${p.ready ? '✓' : ''}
                     </div>`).join('')}
                 </div>
-                <button id="ready-btn">${amReady ? 'Not Ready' : 'Ready!'}</button>
-                ${players.length >= 2 ? '<br><button id="start-btn" style="margin-top:12px;">Start Game</button>' : ''}
+                <button id="ready-btn">${amReady ? t('not_ready') : t('ready')}</button>
+                ${players.length >= 2 ? '<br><button id="start-btn" style="margin-top:12px;">' + t('start_game') + '</button>' : ''}
             </div>
         `;
         document.getElementById('ready-btn').onclick = () => {
@@ -90,6 +93,7 @@
         if (startBtn) {
             startBtn.onclick = () => ws.send('start_game', {});
         }
+        bindLangSwitcher(render);
     }
 
     function renderGameState(app) {
@@ -104,9 +108,10 @@
         let content = `
             <div class="player-header">
                 <div class="name">${playerName}</div>
+                ${langSwitcherHTML()}
                 <div class="info">
-                    <span class="gold">${gold} gold</span>
-                    <span>${handSize} cards</span>
+                    <span class="gold">${gold} ${t('gold')}</span>
+                    <span>${handSize} ${t('cards')}</span>
                 </div>
             </div>
         `;
@@ -114,32 +119,32 @@
         // Characters
         if (state.characters && state.characters.length > 0) {
             content += `<div class="section">
-                <div class="section-title">Your Characters</div>
-                <div style="color:#9b59b6;font-size:18px;">${state.characters.join(', ')}</div>
+                <div class="section-title">${t('your_characters')}</div>
+                <div style="color:#9b59b6;font-size:18px;">${state.characters.map(c => t(c)).join(', ')}</div>
             </div>`;
         }
 
         // Draft phase
         if (state.phase === 'DraftPick' && state.draft_choices && state.draft_choices.length > 0) {
             content += `<div class="section">
-                <div class="section-title">Choose a character</div>
+                <div class="section-title">${t('choose_character')}</div>
                 <div class="draft-choices">
-                    ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}">${c}</div>`).join('')}
+                    ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}">${t(c)}</div>`).join('')}
                 </div>
             </div>`;
         } else if (state.phase === 'DraftPick') {
-            content += '<div class="waiting">Waiting for other players to pick...</div>';
+            content += `<div class="waiting">${t('waiting_for_pick')}</div>`;
         }
 
         // Draw choice
         if (state.phase === 'DrawChoice' && state.drawn_cards) {
             content += `<div class="section">
-                <div class="section-title">Choose a card to keep</div>
+                <div class="section-title">${t('choose_card_keep')}</div>
                 <div class="draw-choices">
                     ${state.drawn_cards.map((d, i) => `
                         <div class="draw-card" data-idx="${i}">
-                            <span>${d.name}</span>
-                            <span class="cost">${d.cost} gold</span>
+                            <span>${t(d.name)}</span>
+                            <span class="cost">${d.cost} ${t('gold')}</span>
                         </div>
                     `).join('')}
                 </div>
@@ -148,26 +153,26 @@
 
         // Player turn
         if (state.is_my_turn && state.phase === 'PlayerTurn') {
-            content += `<div class="turn-indicator">Your turn! (${state.current_role})</div>`;
+            content += `<div class="turn-indicator">${t('your_turn')} (${t(state.current_role)})</div>`;
 
             // Action buttons
             content += '<div class="action-buttons">';
             if (state.can_take_action) {
-                content += '<button id="btn-gold">Take 2 Gold</button>';
-                content += '<button id="btn-draw">Draw Cards</button>';
+                content += `<button id="btn-gold">${t('take_2_gold')}</button>`;
+                content += `<button id="btn-draw">${t('draw_cards')}</button>`;
             }
             if (state.can_use_ability && state.valid_targets && state.valid_targets.length > 0) {
-                content += '<button id="btn-ability">Use Ability</button>';
+                content += `<button id="btn-ability">${t('use_ability')}</button>`;
             }
-            content += '<button id="btn-end">End Turn</button>';
+            content += `<button id="btn-end">${t('end_turn')}</button>`;
             content += '</div>';
 
             // Ability targets
             if (state.can_use_ability && state.valid_targets) {
                 content += `<div class="ability-section hidden" id="ability-targets">
-                    <div class="section-title">Choose target</div>
+                    <div class="section-title">${t('choose_target')}</div>
                     <div class="target-list">
-                        ${state.valid_targets.map(t => `<div class="target-option" data-target="${t}">${t}</div>`).join('')}
+                        ${state.valid_targets.map(tgt => `<div class="target-option" data-target="${tgt}">${translateTarget(tgt)}</div>`).join('')}
                     </div>
                 </div>`;
             }
@@ -175,31 +180,31 @@
             // Hand (buildable)
             if (state.can_build && state.hand && state.hand.length > 0) {
                 content += `<div class="section">
-                    <div class="section-title">Build a district (tap to build)</div>
+                    <div class="section-title">${t('build_district')}</div>
                     <div class="hand-cards">
                         ${state.hand.map(d => `
                             <div class="hand-card buildable" data-name="${d.name}">
-                                <span>${d.name} <small style="color:#888">${colorLabel(d.color)}</small></span>
-                                <span class="cost">${d.cost} gold</span>
+                                <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                <span class="cost">${d.cost} ${t('gold')}</span>
                             </div>
                         `).join('')}
                     </div>
                 </div>`;
             }
         } else if (state.phase === 'PlayerTurn' && !state.is_my_turn) {
-            content += `<div class="waiting">Waiting... ${state.current_role || ''} is playing</div>`;
+            content += `<div class="waiting">${t('waiting')} ${state.current_role ? t(state.current_role) : ''} ${t('waiting_playing')}</div>`;
         }
 
         // Hand (non-turn view)
         if (!(state.is_my_turn && state.phase === 'PlayerTurn' && state.can_build)) {
             if (state.hand && state.hand.length > 0) {
                 content += `<div class="section">
-                    <div class="section-title">Hand</div>
+                    <div class="section-title">${t('hand')}</div>
                     <div class="hand-cards">
                         ${state.hand.map(d => `
                             <div class="hand-card">
-                                <span>${d.name} <small style="color:#888">${colorLabel(d.color)}</small></span>
-                                <span class="cost">${d.cost} gold</span>
+                                <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                <span class="cost">${d.cost} ${t('gold')}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -212,15 +217,16 @@
         if (city.length > 0) {
             const colorMap = { Noble: 'color-noble', Religious: 'color-religious', Trade: 'color-trade', Military: 'color-military', Special: 'color-special' };
             content += `<div class="section">
-                <div class="section-title">City (${city.length})</div>
+                <div class="section-title">${t('city')} (${city.length})</div>
                 <div class="city-cards">
-                    ${city.map(d => `<span class="city-card ${colorMap[d.color] || ''}">${d.name} (${d.cost})</span>`).join('')}
+                    ${city.map(d => `<span class="city-card ${colorMap[d.color] || ''}">${t(d.name)} (${d.cost})</span>`).join('')}
                 </div>
             </div>`;
         }
 
         app.innerHTML = content;
         bindActions();
+        bindLangSwitcher(render);
     }
 
     function bindActions() {
@@ -272,13 +278,11 @@
                 } else if (role === 'Magician') {
                     if (target === 'swap_hand' || target === 'discard_draw') {
                         if (target === 'swap_hand') {
-                            // Need to pick a player - for now use first other player
                             const others = (state.players || []).filter(p => p.id !== playerID);
                             if (others.length > 0) {
                                 ws.send('ability', { extra_data: 'swap_hand', target: others[0].id });
                             }
                         } else {
-                            // Discard/draw - select cards to discard (first card for simplicity)
                             ws.send('ability', { extra_data: 'discard_draw', indices: [0] });
                         }
                     }
@@ -305,27 +309,38 @@
         scores.sort((a, b) => b.total - a.total);
         app.innerHTML = `
             <div style="text-align:center;padding:20px;">
-                <h1>Game Over!</h1>
+                ${langSwitcherHTML()}
+                <h1>${t('game_over')}</h1>
                 <div class="scores-section">
                     ${scores.map((s, i) => `
                         <div class="score-row ${i === 0 ? 'winner' : ''}">
                             <span>${i === 0 ? '🏆 ' : ''}${s.player_name}</span>
-                            <span>${s.total} pts</span>
+                            <span>${s.total} ${t('pts')}</span>
                         </div>
                     `).join('')}
                 </div>
             </div>
         `;
+        bindLangSwitcher(render);
     }
 
     function showError(msg) {
         console.error('Server error:', msg);
-        // Could show a toast notification here
     }
 
     function colorLabel(color) {
         const names = { 1: 'Noble', 2: 'Religious', 3: 'Trade', 4: 'Military', 5: 'Special' };
-        return names[color] || '';
+        const key = names[color] || '';
+        return key ? t(key) : '';
+    }
+
+    function translateTarget(target) {
+        // Targets can be character names, "swap_hand", "discard_draw", or "playerID:districtName"
+        if (target.includes(':')) {
+            const parts = target.split(':');
+            return parts[0] + ':' + t(parts[1]);
+        }
+        return t(target);
     }
 
     function roleNameToNum(name) {
