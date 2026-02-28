@@ -41,15 +41,23 @@ body { font-size: 16px; }
 .hand-card.selected { border-color: #e0a030; background: #1e2d4e; }
 .city-cards {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-direction: column;
+    gap: 4px;
 }
 .city-card {
+    display: block;
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 13px;
     color: #fff;
+    background: #16213e;
+    border-left: 4px solid #555;
 }
+.city-card.color-noble { border-left-color: #c9a227; background: #16213e; }
+.city-card.color-religious { border-left-color: #4a90d9; background: #16213e; }
+.city-card.color-trade { border-left-color: #45a049; background: #16213e; }
+.city-card.color-military { border-left-color: #d9534f; background: #16213e; }
+.city-card.color-special { border-left-color: #9b59b6; background: #16213e; }
 .draft-choices {
     display: flex;
     flex-direction: column;

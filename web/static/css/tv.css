@@ -51,17 +51,25 @@ body { font-size: 20px; }
 }
 .city-districts {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-direction: column;
+    gap: 4px;
     margin-top: 8px;
 }
 .district-chip {
+    display: block;
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: 6px;
     font-size: 14px;
     color: #fff;
     font-weight: 500;
+    background: #1a1a2e;
+    border-left: 4px solid #555;
 }
+.district-chip.color-noble { border-left-color: #c9a227; background: #1a1a2e; }
+.district-chip.color-religious { border-left-color: #4a90d9; background: #1a1a2e; }
+.district-chip.color-trade { border-left-color: #45a049; background: #1a1a2e; }
+.district-chip.color-military { border-left-color: #d9534f; background: #1a1a2e; }
+.district-chip.color-special { border-left-color: #9b59b6; background: #1a1a2e; }
 .draft-info {
     text-align: center;
     padding: 24px;
