@@ -5,7 +5,6 @@ import (
 	qr "citadels/internal/qrcode"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -18,15 +17,15 @@ var upgrader = websocket.Upgrader{
 // Handlers holds HTTP handler dependencies.
 type Handlers struct {
 	LobbyMgr *lobby.Manager
-	Hubs      map[string]*Hub
-	Port      int
+	Hubs     map[string]*Hub
+	Port     int
 }
 
 func NewHandlers(port int) *Handlers {
 	return &Handlers{
 		LobbyMgr: lobby.NewManager(),
-		Hubs:      make(map[string]*Hub),
-		Port:      port,
+		Hubs:     make(map[string]*Hub),
+		Port:     port,
 	}
 }
 
@@ -48,8 +47,8 @@ func (h *Handlers) HandleQR(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "missing game parameter", http.StatusBadRequest)
 		return
 	}
-	ip := getLocalIP()
-	url := fmt.Sprintf("http://%s:%d/lobby.html?game=%s", ip, h.Port, gameID)
+	host := r.Host
+	url := fmt.Sprintf("http://%s/lobby.html?game=%s", host, gameID)
 	png, err := qr.Generate(url)
 	if err != nil {
 		http.Error(w, "QR generation failed", http.StatusInternalServerError)
@@ -98,19 +97,4 @@ func (h *Handlers) HandlePlayerID(w http.ResponseWriter, r *http.Request) {
 	id := GeneratePlayerID()
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte(id))
-}
-
-func getLocalIP() string {
-	addrs, err := net.InterfaceAddrs()
-	if err != nil {
-		return "localhost"
-	}
-	for _, addr := range addrs {
-		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				return ipnet.IP.String()
-			}
-		}
-	}
-	return "localhost"
 }
