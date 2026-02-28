@@ -8,6 +8,8 @@
     let lobbyState = null;
     let ws = null;
     let joined = false;
+    let magicianMode = null; // 'swap_hand' | 'discard_draw' | null
+    let selectedDiscardIndices = new Set();
 
     if (!gameID) {
         document.body.innerHTML = '<div class="container"><h1>' + t('no_game_id') + '</h1></div>';
@@ -101,6 +103,12 @@
 
         if (state.phase === 'GameOver') { renderGameOver(app); return; }
 
+        // Reset magician UI when ability is no longer available
+        if (!state.can_use_ability || state.current_role !== 'Magician') {
+            magicianMode = null;
+            selectedDiscardIndices.clear();
+        }
+
         const me = (state.players || []).find(p => p.id === playerID);
         const gold = me ? me.gold : 0;
         const handSize = state.hand ? state.hand.length : 0;
@@ -169,12 +177,40 @@
             content += '</div>';
 
             // Ability targets
-            if (state.can_use_ability && state.valid_targets) {
+            if (state.can_use_ability && state.valid_targets && !magicianMode) {
                 content += `<div class="ability-section hidden" id="ability-targets">
                     <div class="section-title">${t('choose_target')}</div>
                     <div class="target-list">
                         ${state.valid_targets.map(tgt => `<div class="target-option" data-target="${tgt}">${translateTarget(tgt)}</div>`).join('')}
                     </div>
+                </div>`;
+            }
+
+            // Magician: choose player to swap hands with
+            if (state.current_role === 'Magician' && magicianMode === 'swap_hand') {
+                const others = (state.players || []).filter(p => p.id !== playerID);
+                content += `<div class="ability-section" id="magician-swap">
+                    <div class="section-title">${t('choose_player_swap')}</div>
+                    <div class="target-list">
+                        ${others.map(p => `<div class="target-option magician-swap-target" data-pid="${p.id}">${p.name}</div>`).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // Magician: select cards to discard and redraw
+            if (state.current_role === 'Magician' && magicianMode === 'discard_draw') {
+                content += `<div class="ability-section" id="magician-discard">
+                    <div class="section-title">${t('choose_cards_discard')}</div>
+                    <div class="hand-cards">
+                        ${(state.hand || []).map((d, i) => `
+                            <div class="hand-card magician-discard-card ${selectedDiscardIndices.has(i) ? 'selected' : ''} ${colorClass(d.color)}" data-idx="${i}">
+                                <div><span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}</div>
+                                <span class="cost">${d.cost} ${t('gold')}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button id="magician-discard-confirm" style="margin-top:10px;width:100%;" ${selectedDiscardIndices.size === 0 ? 'disabled' : ''}>${t('discard_and_draw')} (${selectedDiscardIndices.size})</button>
                 </div>`;
             }
 
@@ -262,13 +298,20 @@
         const btnAbility = document.getElementById('btn-ability');
         if (btnAbility) {
             btnAbility.onclick = () => {
+                if (magicianMode) {
+                    // Cancel magician sub-mode
+                    magicianMode = null;
+                    selectedDiscardIndices.clear();
+                    render();
+                    return;
+                }
                 const targets = document.getElementById('ability-targets');
                 if (targets) targets.classList.toggle('hidden');
             };
         }
 
-        // Ability targets
-        document.querySelectorAll('.target-option').forEach(el => {
+        // Ability targets (skip magician sub-targets which have their own handlers)
+        document.querySelectorAll('.target-option[data-target]').forEach(el => {
             el.onclick = () => {
                 const target = el.dataset.target;
                 // Determine ability type based on current role
@@ -279,14 +322,9 @@
                     ws.send('ability', { character: roleNameToNum(target) });
                 } else if (role === 'Magician') {
                     if (target === 'swap_hand' || target === 'discard_draw') {
-                        if (target === 'swap_hand') {
-                            const others = (state.players || []).filter(p => p.id !== playerID);
-                            if (others.length > 0) {
-                                ws.send('ability', { extra_data: 'swap_hand', target: others[0].id });
-                            }
-                        } else {
-                            ws.send('ability', { extra_data: 'discard_draw', indices: [0] });
-                        }
+                        magicianMode = target;
+                        selectedDiscardIndices.clear();
+                        render();
                     }
                 } else if (role === 'Warlord') {
                     // target format: "playerID:districtName"
@@ -297,6 +335,39 @@
                 }
             };
         });
+
+        // Magician: swap hand — pick a player
+        document.querySelectorAll('.magician-swap-target').forEach(el => {
+            el.onclick = () => {
+                ws.send('ability', { extra_data: 'swap_hand', target: el.dataset.pid });
+                magicianMode = null;
+            };
+        });
+
+        // Magician: discard/draw — toggle card selection
+        document.querySelectorAll('.magician-discard-card').forEach(el => {
+            el.onclick = () => {
+                const idx = parseInt(el.dataset.idx);
+                if (selectedDiscardIndices.has(idx)) {
+                    selectedDiscardIndices.delete(idx);
+                } else {
+                    selectedDiscardIndices.add(idx);
+                }
+                render();
+            };
+        });
+
+        // Magician: confirm discard
+        const discardConfirm = document.getElementById('magician-discard-confirm');
+        if (discardConfirm) {
+            discardConfirm.onclick = () => {
+                if (selectedDiscardIndices.size > 0) {
+                    ws.send('ability', { extra_data: 'discard_draw', indices: Array.from(selectedDiscardIndices) });
+                    magicianMode = null;
+                    selectedDiscardIndices.clear();
+                }
+            };
+        }
 
         // Build
         document.querySelectorAll('.hand-card.buildable').forEach(el => {

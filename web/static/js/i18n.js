@@ -92,6 +92,11 @@
             'waiting_playing': 'is playing',
             'waiting': 'Waiting...',
             'choose_card_keep': 'Choose a card to keep',
+            'swap_hand': 'Swap hand',
+            'discard_draw': 'Discard & Draw',
+            'choose_player_swap': 'Choose player to swap hands with',
+            'choose_cards_discard': 'Select cards to discard',
+            'discard_and_draw': 'Discard & Draw',
             'your_characters': 'Your Characters',
 
             // UI — deck
@@ -237,6 +242,11 @@
             'waiting_playing': 'играет',
             'waiting': 'Ожидание...',
             'choose_card_keep': 'Выберите карту',
+            'swap_hand': 'Обменяться рукой',
+            'discard_draw': 'Сбросить и взять',
+            'choose_player_swap': 'Выберите игрока для обмена',
+            'choose_cards_discard': 'Выберите карты для сброса',
+            'discard_and_draw': 'Сбросить и взять',
             'your_characters': 'Ваши персонажи',
 
             // UI — deck
