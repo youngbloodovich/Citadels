@@ -172,12 +172,21 @@ func (g *Game) applyDraftPick(playerID string, action Action) ([]Event, error) {
 }
 
 func (g *Game) resolveNext() []Event {
-	role := g.NextCharacterToCall()
-	if role == 0 {
-		// All characters called — end of round
-		return g.endRound()
+	var events []Event
+	for {
+		role := g.NextCharacterToCall()
+		if role == 0 {
+			// All characters called — end of round
+			events = append(events, g.endRound()...)
+			return events
+		}
+		events = append(events, g.CallCharacter(role)...)
+		// If a player got a turn, stop and wait for their actions
+		if g.Phase == PhasePlayerTurn {
+			return events
+		}
+		// Otherwise (nobody has this character, or murdered) — continue to next
 	}
-	return g.CallCharacter(role)
 }
 
 func (g *Game) endRound() []Event {
