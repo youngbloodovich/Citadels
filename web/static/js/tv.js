@@ -9,6 +9,8 @@
 
     const wsUrl = `ws://${location.host}/ws?game=${gameID}&type=tv`;
     let state = null;
+    const eventLog = [];
+    const MAX_LOG = 50;
 
     const ws = new WS(wsUrl,
         (env) => {
@@ -83,10 +85,20 @@
             </div>
             ${draftHTML}
             ${callHTML}
-            <div class="players-grid">
-                ${(state.players || []).map(p => renderPlayerCard(p)).join('')}
+            <div class="tv-body">
+                <div class="players-grid">
+                    ${(state.players || []).map(p => renderPlayerCard(p)).join('')}
+                </div>
+                <div class="event-log">
+                    <div class="event-log-title">Event Log</div>
+                    <div class="event-log-list" id="event-log-list">
+                        ${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}
+                    </div>
+                </div>
             </div>
         `;
+        const logList = document.getElementById('event-log-list');
+        if (logList) logList.scrollTop = logList.scrollHeight;
     }
 
     function renderPlayerCard(p) {
@@ -136,8 +148,56 @@
     }
 
     function handleEvent(ev) {
-        // Events are processed via state updates
-        console.log('Event:', ev.type, ev);
+        const entry = formatEvent(ev);
+        if (entry) {
+            eventLog.push(entry);
+            if (eventLog.length > MAX_LOG) eventLog.shift();
+            renderGame();
+        }
+    }
+
+    function playerName(id) {
+        if (!state || !state.players) return id;
+        const p = state.players.find(p => p.id === id);
+        return p ? p.name : id;
+    }
+
+    function formatEvent(ev) {
+        const d = ev.data || {};
+        switch (ev.type) {
+            case 'draft_start':
+                return { text: `Round ${d.round} — Draft started`, css: 'ev-round' };
+            case 'draft_pick':
+                return { text: `${playerName(ev.player)} picked a character`, css: 'ev-draft' };
+            case 'draft_done':
+                return { text: 'Draft complete — Resolution begins', css: 'ev-round' };
+            case 'character_call':
+                return { text: `Calling #${d.number} ${d.role}...`, css: 'ev-call' };
+            case 'murdered':
+                return { text: `${d.role} (${playerName(ev.player)}) was murdered!`, css: 'ev-danger' };
+            case 'robbed':
+                return { text: `${d.role} (${playerName(ev.player)}) was robbed of ${d.stolen} gold by ${d.thief}!`, css: 'ev-danger' };
+            case 'gold_taken':
+                return { text: `${playerName(ev.player)} took ${d.gold} gold`, css: 'ev-action' };
+            case 'cards_drawn':
+                return { text: `${playerName(ev.player)} drew cards`, css: 'ev-action' };
+            case 'district_built':
+                return { text: `${playerName(ev.player)} built ${d.district} (${d.cost}g)`, css: 'ev-build' };
+            case 'ability_used':
+                return { text: `${playerName(ev.player)} used ${d.ability}`, css: 'ev-ability' };
+            case 'gold_collected':
+                return { text: `${playerName(ev.player)} collected ${d.count} gold (${d.color})`, css: 'ev-action' };
+            case 'crown_passed':
+                return { text: `Crown passed to ${playerName(ev.player)}`, css: 'ev-round' };
+            case 'turn_end':
+                return { text: `${playerName(ev.player)} (${d.role}) ended turn`, css: 'ev-minor' };
+            case 'round_end':
+                return { text: `Round ${d.round} ended`, css: 'ev-round' };
+            case 'game_over':
+                return { text: 'Game Over!', css: 'ev-round' };
+            default:
+                return null;
+        }
     }
 
     // Initial lobby render
