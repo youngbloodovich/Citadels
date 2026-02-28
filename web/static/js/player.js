@@ -143,7 +143,8 @@
                 <div class="draw-choices">
                     ${state.drawn_cards.map((d, i) => `
                         <div class="draw-card ${colorClass(d.color)}" data-idx="${i}">
-                            <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                            <div><span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                            ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}</div>
                             <span class="cost">${d.cost} ${t('gold')}</span>
                         </div>
                     `).join('')}
@@ -184,7 +185,8 @@
                     <div class="hand-cards">
                         ${state.hand.map(d => `
                             <div class="hand-card buildable ${colorClass(d.color)}" data-name="${d.name}">
-                                <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                <div><span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}</div>
                                 <span class="cost">${d.cost} ${t('gold')}</span>
                             </div>
                         `).join('')}
@@ -203,7 +205,8 @@
                     <div class="hand-cards">
                         ${state.hand.map(d => `
                             <div class="hand-card ${colorClass(d.color)}">
-                                <span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                <div><span>${t(d.name)} <small style="color:#888">${colorLabel(d.color)}</small></span>
+                                ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}</div>
                                 <span class="cost">${d.cost} ${t('gold')}</span>
                             </div>
                         `).join('')}
@@ -219,7 +222,7 @@
             content += `<div class="section">
                 <div class="section-title">${t('city')} (${city.length})</div>
                 <div class="city-cards">
-                    ${city.map(d => `<span class="city-card ${colorMap[d.color] || ''}">${t(d.name)} (${d.cost})</span>`).join('')}
+                    ${city.map(d => `<span class="city-card ${colorMap[d.color] || ''}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})</span>`).join('')}
                 </div>
             </div>`;
         }

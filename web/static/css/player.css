@@ -128,3 +128,4 @@ body { font-size: 16px; }
     border-bottom: 1px solid #333;
 }
 .score-row.winner { color: #e0a030; font-weight: bold; }
+.card-effect { font-size: 12px; color: #b080d0; margin-top: 2px; font-style: italic; }

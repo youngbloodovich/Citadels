@@ -126,6 +126,18 @@
             'ev_round_end': 'Round {round} ended',
             'ev_game_over': 'Game Over!',
 
+            // District effects
+            'effect_Haunted City': 'You may build duplicate copies of this district',
+            'effect_Keep': 'Cannot be destroyed by the Warlord',
+            'effect_Laboratory': 'Discard 1 card from hand → gain 1 gold',
+            'effect_Smithy': 'Pay 2 gold → draw 3 cards',
+            'effect_Observatory': 'When drawing cards, draw 3 instead of 2',
+            'effect_Graveyard': 'Pay 1 gold to take a destroyed district into your hand',
+            'effect_School of Magic': 'Counts as any color for gold collection and color bonus',
+            'effect_Library': 'When drawing cards, keep all of them',
+            'effect_University': 'Worth 8 points instead of 6 in final scoring',
+            'effect_Dragon Gate': 'Worth 8 points instead of 6 in final scoring',
+
             // Phases
             'DraftPick': 'Draft',
             'PlayerTurn': 'Turn',
@@ -259,6 +271,18 @@
             'ev_round_end': 'Раунд {round} завершён',
             'ev_game_over': 'Игра окончена!',
 
+            // District effects
+            'effect_Haunted City': 'Можно строить дубликаты этого района',
+            'effect_Keep': 'Не может быть разрушен Кондотьером',
+            'effect_Laboratory': 'Сбросить 1 карту из руки → получить 1 золото',
+            'effect_Smithy': 'Заплатить 2 золота → взять 3 карты',
+            'effect_Observatory': 'При взятии карт тянуть 3 вместо 2',
+            'effect_Graveyard': 'Заплатить 1 золото, чтобы вернуть разрушенный район в руку',
+            'effect_School of Magic': 'Считается любым цветом для сбора золота и бонуса за цвета',
+            'effect_Library': 'При взятии карт оставить все себе',
+            'effect_University': 'Приносит 8 очков вместо 6 при подсчёте',
+            'effect_Dragon Gate': 'Приносит 8 очков вместо 6 при подсчёте',
+
             // Phases
             'DraftPick': 'Драфт',
             'PlayerTurn': 'Ход',
@@ -296,6 +320,14 @@
             ' | ' +
             '<span class="lang-option' + (currentLang === 'ru' ? ' active' : '') + '" data-lang="ru">RU</span>' +
             '</div>';
+    };
+
+    window.districtEffect = function(name) {
+        var key = 'effect_' + name;
+        var dict = translations[currentLang] || translations['en'];
+        if (dict[key] !== undefined) return dict[key];
+        if (translations['en'][key] !== undefined) return translations['en'][key];
+        return '';
     };
 
     window.bindLangSwitcher = function(onSwitch) {

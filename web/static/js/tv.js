@@ -123,7 +123,7 @@
                 ${p.revealed_roles && p.revealed_roles.length > 0 ?
                     `<div style="color:#9b59b6;margin:4px 0;">${p.revealed_roles.map(r => t(r)).join(', ')}</div>` : ''}
                 <div class="city-districts">
-                    ${(p.city || []).map(d => `<span class="district-chip ${colorMap[d.color] || ''}">${t(d.name)} (${d.cost})</span>`).join('')}
+                    ${(p.city || []).map(d => `<span class="district-chip ${colorMap[d.color] || ''}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})${districtEffect(d.name) ? ' ✦' : ''}</span>`).join('')}
                 </div>
             </div>
         `;
