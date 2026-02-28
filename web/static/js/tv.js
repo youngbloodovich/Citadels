@@ -112,7 +112,6 @@
 
     function renderPlayerCard(p) {
         const isActive = state.current_turn === p.name;
-        const colorMap = { Noble: 'color-noble', Religious: 'color-religious', Trade: 'color-trade', Military: 'color-military', Special: 'color-special' };
         return `
             <div class="player-card ${isActive ? 'active' : ''}">
                 <div class="name ${p.has_crown ? 'crown' : ''}">${p.name}</div>
@@ -123,7 +122,7 @@
                 ${p.revealed_roles && p.revealed_roles.length > 0 ?
                     `<div style="color:#9b59b6;margin:4px 0;">${p.revealed_roles.map(r => t(r)).join(', ')}</div>` : ''}
                 <div class="city-districts">
-                    ${(p.city || []).map(d => `<span class="district-chip ${colorMap[d.color] || ''}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})${districtEffect(d.name) ? ' ✦' : ''}</span>`).join('')}
+                    ${(p.city || []).map(d => `<span class="district-chip ${colorClass(d.color)}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})${districtEffect(d.name) ? ' ✦' : ''}</span>`).join('')}
                 </div>
             </div>
         `;

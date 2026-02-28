@@ -218,11 +218,10 @@
         // City
         const city = me ? me.city || [] : [];
         if (city.length > 0) {
-            const colorMap = { Noble: 'color-noble', Religious: 'color-religious', Trade: 'color-trade', Military: 'color-military', Special: 'color-special' };
             content += `<div class="section">
                 <div class="section-title">${t('city')} (${city.length})</div>
                 <div class="city-cards">
-                    ${city.map(d => `<span class="city-card ${colorMap[d.color] || ''}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})</span>`).join('')}
+                    ${city.map(d => `<span class="city-card ${colorClass(d.color)}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})</span>`).join('')}
                 </div>
             </div>`;
         }
@@ -335,12 +334,6 @@
         const names = { 1: 'Noble', 2: 'Religious', 3: 'Trade', 4: 'Military', 5: 'Special' };
         const key = names[color] || color || '';
         return key ? t(key) : '';
-    }
-
-    function colorClass(color) {
-        const numMap = { 1: 'color-noble', 2: 'color-religious', 3: 'color-trade', 4: 'color-military', 5: 'color-special' };
-        const strMap = { Noble: 'color-noble', Religious: 'color-religious', Trade: 'color-trade', Military: 'color-military', Special: 'color-special' };
-        return numMap[color] || strMap[color] || '';
     }
 
     function translateTarget(target) {

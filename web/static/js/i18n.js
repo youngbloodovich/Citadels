@@ -314,6 +314,12 @@
         localStorage.setItem('citadels_lang', lang);
     };
 
+    window.colorClass = function(color) {
+        var numMap = { 1: 'color-noble', 2: 'color-religious', 3: 'color-trade', 4: 'color-military', 5: 'color-special' };
+        var strMap = { Noble: 'color-noble', Religious: 'color-religious', Trade: 'color-trade', Military: 'color-military', Special: 'color-special' };
+        return numMap[color] || strMap[color] || '';
+    };
+
     window.langSwitcherHTML = function() {
         return '<div class="lang-switcher">' +
             '<span class="lang-option' + (currentLang === 'en' ? ' active' : '') + '" data-lang="en">EN</span>' +
