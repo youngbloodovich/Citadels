@@ -31,11 +31,15 @@ func (w Warlord) ValidTargets(g *engine.Game, playerID string) []string {
 		if len(p.City) >= g.Config.EndCitySize {
 			continue
 		}
+		hasGreatWall := p.CityHas("Great Wall")
 		for _, d := range p.City {
 			if d.Name == "Keep" {
 				continue // Keep can't be destroyed
 			}
 			cost := d.Cost - 1
+			if hasGreatWall {
+				cost = d.Cost
+			}
 			if cost <= player.Gold {
 				targets = append(targets, fmt.Sprintf("%s:%s", p.ID, d.Name))
 			}
@@ -79,6 +83,9 @@ func (w Warlord) Apply(g *engine.Game, playerID string, action engine.Action) ([
 	}
 
 	cost := d.Cost - 1
+	if target.CityHas("Great Wall") {
+		cost = d.Cost
+	}
 	if cost > player.Gold {
 		return nil, fmt.Errorf("not enough gold to destroy %s (need %d, have %d)", d.Name, cost, player.Gold)
 	}

@@ -76,6 +76,7 @@ func BaseDistricts() []District {
 	add(1, "Smithy", ColorSpecial, 5)
 	add(1, "Observatory", ColorSpecial, 5)
 	add(1, "Graveyard", ColorSpecial, 5)
+	add(1, "Great Wall", ColorSpecial, 6)
 	add(1, "School of Magic", ColorSpecial, 6)
 	add(1, "Library", ColorSpecial, 6)
 	add(1, "University", ColorSpecial, 6)

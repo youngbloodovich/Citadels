@@ -210,7 +210,8 @@
                                 ${groups[pid].map(tgt => {
                                     const districtName = tgt.split(':')[1];
                                     const district = player && (player.city || []).find(d => d.name === districtName);
-                                    const cost = district ? district.cost - 1 : '?';
+                                    const hasGreatWall = player && (player.city || []).some(d => d.name === 'Great Wall');
+                                    const cost = district ? district.cost - (hasGreatWall ? 0 : 1) : '?';
                                     return `<div class="target-option" data-target="${tgt}">${t(districtName)} <span class="destroy-cost">(${cost} ${t('gold')})</span></div>`;
                                 }).join('')}
                             </div>
@@ -522,7 +523,8 @@
             let costText = '';
             if (player) {
                 const district = (player.city || []).find(d => d.name === districtName);
-                if (district) costText = ` (${district.cost - 1} ${t('gold')})`;
+                const hasGreatWall = (player.city || []).some(d => d.name === 'Great Wall');
+                if (district) costText = ` (${district.cost - (hasGreatWall ? 0 : 1)} ${t('gold')})`;
             }
             return playerName + ': ' + t(districtName) + costText;
         }

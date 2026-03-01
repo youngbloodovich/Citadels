@@ -232,8 +232,8 @@ func TestDeck(t *testing.T) {
 
 func TestBaseDistricts(t *testing.T) {
 	cards := engine.BaseDistricts()
-	if len(cards) != 62 {
-		t.Errorf("base districts: got %d cards, want 62", len(cards))
+	if len(cards) != 63 {
+		t.Errorf("base districts: got %d cards, want 63", len(cards))
 	}
 }
 
