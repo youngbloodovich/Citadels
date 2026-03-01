@@ -191,11 +191,37 @@
             // Ability targets
             if (state.can_use_ability && state.valid_targets && !magicianMode) {
                 content += `<div class="ability-section hidden" id="ability-targets">
-                    <div class="section-title">${t('choose_target')}</div>
-                    <div class="target-list">
+                    <div class="section-title">${t('choose_target')}</div>`;
+                if (state.current_role === 'Warlord') {
+                    // Group targets by player
+                    const groups = {};
+                    state.valid_targets.forEach(tgt => {
+                        const parts = tgt.split(':');
+                        const pid = parts[0];
+                        if (!groups[pid]) groups[pid] = [];
+                        groups[pid].push(tgt);
+                    });
+                    for (const pid of Object.keys(groups)) {
+                        const player = (state.players || []).find(p => p.id === pid);
+                        const playerName = player ? player.name : pid;
+                        content += `<div class="target-group">
+                            <div class="target-group-name">${playerName}</div>
+                            <div class="target-list">
+                                ${groups[pid].map(tgt => {
+                                    const districtName = tgt.split(':')[1];
+                                    const district = player && (player.city || []).find(d => d.name === districtName);
+                                    const cost = district ? district.cost - 1 : '?';
+                                    return `<div class="target-option" data-target="${tgt}">${t(districtName)} <span class="destroy-cost">(${cost} ${t('gold')})</span></div>`;
+                                }).join('')}
+                            </div>
+                        </div>`;
+                    }
+                } else {
+                    content += `<div class="target-list">
                         ${state.valid_targets.map(tgt => `<div class="target-option" data-target="${tgt}">${translateTarget(tgt)}</div>`).join('')}
-                    </div>
-                </div>`;
+                    </div>`;
+                }
+                content += `</div>`;
             }
 
             // Magician: choose player to swap hands with
@@ -489,7 +515,16 @@
         // Targets can be character names, "swap_hand", "discard_draw", or "playerID:districtName"
         if (target.includes(':')) {
             const parts = target.split(':');
-            return parts[0] + ':' + t(parts[1]);
+            const pid = parts[0];
+            const districtName = parts[1];
+            const player = (state.players || []).find(p => p.id === pid);
+            const playerName = player ? player.name : pid;
+            let costText = '';
+            if (player) {
+                const district = (player.city || []).find(d => d.name === districtName);
+                if (district) costText = ` (${district.cost - 1} ${t('gold')})`;
+            }
+            return playerName + ': ' + t(districtName) + costText;
         }
         return t(target);
     }
