@@ -485,17 +485,29 @@
     function renderGameOver(app) {
         const scores = state.scores || [];
         scores.sort((a, b) => b.total - a.total);
+        const players = state.players || [];
         app.innerHTML = `
             <div style="text-align:center;padding:20px;">
                 ${langSwitcherHTML()}
                 <h1>${t('game_over')}</h1>
                 <div class="scores-section">
-                    ${scores.map((s, i) => `
-                        <div class="score-row ${i === 0 ? 'winner' : ''}">
-                            <span>${i === 0 ? '🏆 ' : ''}${s.player_name}</span>
-                            <span>${s.total} ${t('pts')}</span>
-                        </div>
-                    `).join('')}
+                    ${scores.map((s, i) => {
+                        const player = players.find(p => p.id === s.player_id);
+                        const city = player ? player.city || [] : [];
+                        return `
+                        <div class="score-player-block ${i === 0 ? 'winner' : ''}">
+                            <div class="score-row">
+                                <span>${i === 0 ? '🏆 ' : ''}${s.player_name}</span>
+                                <span>${s.total} ${t('pts')}</span>
+                            </div>
+                            <div class="score-city">
+                                ${city.map(d => `<div class="city-card ${colorClass(d.color)}">
+                                    <span>${t(d.name)} (${d.cost})</span>
+                                    ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}
+                                </div>`).join('')}
+                            </div>
+                        </div>`;
+                    }).join('')}
                 </div>
             </div>
         `;

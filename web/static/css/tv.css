@@ -104,6 +104,8 @@ body { font-size: 20px; }
 }
 .scores-table th { background: #16213e; color: #e0a030; }
 .scores-table tr:first-child td { font-weight: bold; font-size: 24px; }
+.score-city-row { padding: 4px 8px 12px !important; }
+.score-city-row .district-chip { font-size: 14px; }
 .lobby-players {
     display: flex;
     flex-wrap: wrap;

@@ -139,4 +139,7 @@ body { font-size: 16px; }
     border-bottom: 1px solid #333;
 }
 .score-row.winner { color: #e0a030; font-weight: bold; }
+.score-player-block { margin-bottom: 16px; }
+.score-player-block.winner .score-row { color: #e0a030; font-weight: bold; }
+.score-city { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 10px 8px; }
 .card-effect { font-size: 12px; color: #b080d0; margin-top: 2px; font-style: italic; }

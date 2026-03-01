@@ -131,6 +131,7 @@
     function renderGameOver(app) {
         const scores = state.scores || [];
         scores.sort((a, b) => b.total - a.total);
+        const players = state.players || [];
         app.innerHTML = `
             <div class="tv-header">
                 <h1>${t('game_over')}</h1>
@@ -141,7 +142,10 @@
                     <tr><th>${t('player')}</th><th>${t('districts')}</th><th>${t('colors')}</th><th>${t('complete')}</th><th>${t('special')}</th><th>${t('total')}</th></tr>
                 </thead>
                 <tbody>
-                    ${scores.map(s => `
+                    ${scores.map(s => {
+                        const player = players.find(p => p.id === s.player_id);
+                        const city = player ? player.city || [] : [];
+                        return `
                         <tr>
                             <td>${s.player_name}</td>
                             <td>${s.district_score}</td>
@@ -150,7 +154,12 @@
                             <td>${s.special_bonus}</td>
                             <td><strong>${s.total}</strong></td>
                         </tr>
-                    `).join('')}
+                        <tr>
+                            <td colspan="6" class="score-city-row">
+                                ${city.map(d => `<span class="district-chip ${colorClass(d.color)}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})</span>`).join('')}
+                            </td>
+                        </tr>`;
+                    }).join('')}
                 </tbody>
             </table>
         `;
