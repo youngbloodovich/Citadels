@@ -487,28 +487,41 @@
         scores.sort((a, b) => b.total - a.total);
         const players = state.players || [];
         app.innerHTML = `
-            <div style="text-align:center;padding:20px;">
+            <div style="padding:16px;">
                 ${langSwitcherHTML()}
-                <h1>${t('game_over')}</h1>
-                <div class="scores-section">
-                    ${scores.map((s, i) => {
-                        const player = players.find(p => p.id === s.player_id);
-                        const city = player ? player.city || [] : [];
-                        return `
-                        <div class="score-player-block ${i === 0 ? 'winner' : ''}">
-                            <div class="score-row">
-                                <span>${i === 0 ? '🏆 ' : ''}${s.player_name}</span>
-                                <span>${s.total} ${t('pts')}</span>
-                            </div>
-                            <div class="score-city">
-                                ${city.map(d => `<div class="city-card ${colorClass(d.color)}">
-                                    <span>${t(d.name)} (${d.cost})</span>
-                                    ${districtEffect(d.name) ? `<div class="card-effect">${districtEffect(d.name)}</div>` : ''}
-                                </div>`).join('')}
-                            </div>
-                        </div>`;
-                    }).join('')}
-                </div>
+                <h1 style="text-align:center;margin-bottom:16px;">${t('game_over')}</h1>
+                <table class="scores-table">
+                    <thead>
+                        <tr>
+                            <th>${t('player')}</th>
+                            <th>${t('districts')}</th>
+                            <th>${t('colors')}</th>
+                            <th>${t('complete')}</th>
+                            <th>${t('special')}</th>
+                            <th>${t('total')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${scores.map((s, i) => {
+                            const player = players.find(p => p.id === s.player_id);
+                            const city = player ? player.city || [] : [];
+                            return `
+                            <tr class="${i === 0 ? 'winner-row' : ''}">
+                                <td>${i === 0 ? '🏆 ' : ''}${s.player_name}</td>
+                                <td>${s.district_score}</td>
+                                <td>${s.color_bonus}</td>
+                                <td>${s.first_complete + s.other_complete}</td>
+                                <td>${s.special_bonus}</td>
+                                <td><strong>${s.total}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="score-city-row">
+                                    ${city.map(d => `<span class="district-chip ${colorClass(d.color)}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})</span>`).join('')}
+                                </td>
+                            </tr>`;
+                        }).join('')}
+                    </tbody>
+                </table>
             </div>
         `;
         bindLangSwitcher(render);

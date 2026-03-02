@@ -142,11 +142,11 @@
                     <tr><th>${t('player')}</th><th>${t('districts')}</th><th>${t('colors')}</th><th>${t('complete')}</th><th>${t('special')}</th><th>${t('total')}</th></tr>
                 </thead>
                 <tbody>
-                    ${scores.map(s => {
+                    ${scores.map((s, i) => {
                         const player = players.find(p => p.id === s.player_id);
                         const city = player ? player.city || [] : [];
                         return `
-                        <tr>
+                        <tr class="${i === 0 ? 'winner-row' : ''}">
                             <td>${s.player_name}</td>
                             <td>${s.district_score}</td>
                             <td>${s.color_bonus}</td>

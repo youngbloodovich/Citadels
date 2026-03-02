@@ -46,3 +46,43 @@ input:focus { outline: none; border-color: #e0a030; }
 .lang-option { cursor: pointer; padding: 2px 6px; border-radius: 4px; }
 .lang-option:hover { color: #eee; }
 .lang-option.active { color: #e0a030; font-weight: bold; }
+
+/* District chips — unified style for TV and phone */
+.district-chip {
+    display: block;
+    padding: 3px 8px 3px 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 500;
+    background: #16213e;
+    border-left: 5px solid #555;
+    text-align: left;
+}
+.district-chip.color-noble    { border-left-color: #c9a227; }
+.district-chip.color-religious { border-left-color: #4a90d9; }
+.district-chip.color-trade    { border-left-color: #45a049; }
+.district-chip.color-military { border-left-color: #d9534f; }
+.district-chip.color-special  { border-left-color: #9b59b6; }
+
+.city-districts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+/* Scores table — shared base */
+.scores-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+}
+.scores-table th, .scores-table td {
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+.scores-table th { background: #16213e; color: #e0a030; }
+.scores-table .winner-row td { font-weight: bold; color: #e0a030; }
+.score-city-row { padding: 4px 8px 10px !important; text-align: left !important; }
