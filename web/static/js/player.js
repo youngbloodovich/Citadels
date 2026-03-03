@@ -11,6 +11,9 @@
     let magicianMode = null; // 'swap_hand' | 'discard_draw' | null
     let selectedDiscardIndices = new Set();
     let labMode = false;
+    let tableOpen = true;
+    const eventLog = [];
+    const MAX_LOG = 30;
 
     if (!gameID) {
         document.body.innerHTML = '<div class="container"><h1>' + t('no_game_id') + '</h1></div>';
@@ -30,7 +33,7 @@
                 if (env.type === 'lobby_update') { lobbyState = env.payload; render(); }
                 else if (env.type === 'player_state') { state = env.payload; render(); }
                 else if (env.type === 'error') showError(env.payload.message);
-                else if (env.type === 'event') console.log('Event:', env.payload);
+                else if (env.type === 'event') { pushEvent(env.payload); render(); }
             },
             () => { if (joined) rejoin(); },
             () => {}
@@ -134,6 +137,8 @@
                 </div>
             </div>
         `;
+
+        content += renderTable();
 
         // Characters
         if (state.characters && state.characters.length > 0) {
@@ -336,9 +341,17 @@
         app.innerHTML = content;
         bindActions();
         bindLangSwitcher(render);
+        const logList = document.querySelector('.table-log');
+        if (logList) logList.scrollTop = logList.scrollHeight;
     }
 
     function bindActions() {
+        // Table toggle
+        const tableToggle = document.getElementById('table-toggle');
+        if (tableToggle) {
+            tableToggle.onclick = () => { tableOpen = !tableOpen; render(); };
+        }
+
         // Draft pick
         document.querySelectorAll('.draft-choice').forEach(el => {
             el.onclick = () => {
@@ -564,6 +577,101 @@
     function roleNameToNum(name) {
         const map = { Assassin: 1, Thief: 2, Magician: 3, King: 4, Bishop: 5, Merchant: 6, Architect: 7, Warlord: 8 };
         return map[name] || 0;
+    }
+
+    // --- Table panel (other players) ---
+
+    function pName(id) {
+        if (!state || !state.players) return id;
+        const p = state.players.find(p => p.id === id);
+        return p ? p.name : id;
+    }
+
+    function formatEvent(ev) {
+        const d = ev.data || {};
+        switch (ev.type) {
+            case 'draft_start':
+                return { text: t('ev_draft_start', { round: d.round }), css: 'ev-round' };
+            case 'draft_pick':
+                return { text: t('ev_draft_pick', { player: pName(ev.player) }), css: 'ev-draft' };
+            case 'draft_done':
+                return { text: t('ev_draft_done'), css: 'ev-round' };
+            case 'character_call':
+                return { text: t('ev_character_call', { number: d.number, role: t(d.role) }), css: 'ev-call' };
+            case 'murdered':
+                return { text: t('ev_murdered', { role: t(d.role), player: pName(ev.player) }), css: 'ev-danger' };
+            case 'robbed':
+                return { text: t('ev_robbed', { role: t(d.role), player: pName(ev.player), stolen: d.stolen, thief: t(d.thief) }), css: 'ev-danger' };
+            case 'gold_taken':
+                return { text: t('ev_gold_taken', { player: pName(ev.player), gold: d.gold }), css: 'ev-action' };
+            case 'cards_drawn':
+                return { text: t('ev_cards_drawn', { player: pName(ev.player) }), css: 'ev-action' };
+            case 'district_built':
+                return { text: t('ev_district_built', { player: pName(ev.player), district: t(d.district), cost: d.cost }), css: 'ev-build' };
+            case 'ability_used':
+                return { text: t('ev_ability_used', { player: pName(ev.player), ability: t(d.ability) }), css: 'ev-ability' };
+            case 'gold_collected':
+                return { text: t('ev_gold_collected', { player: pName(ev.player), count: d.count, color: t(d.color) }), css: 'ev-action' };
+            case 'crown_passed':
+                return { text: t('ev_crown_passed', { player: pName(ev.player) }), css: 'ev-round' };
+            case 'turn_end':
+                return { text: t('ev_turn_end', { player: pName(ev.player), role: t(d.role) }), css: 'ev-minor' };
+            case 'round_end':
+                return { text: t('ev_round_end', { round: d.round }), css: 'ev-round' };
+            case 'game_over':
+                return { text: t('ev_game_over'), css: 'ev-round' };
+            default:
+                return null;
+        }
+    }
+
+    function pushEvent(ev) {
+        const entry = formatEvent(ev);
+        if (entry) {
+            eventLog.push(entry);
+            if (eventLog.length > MAX_LOG) eventLog.shift();
+        }
+    }
+
+    function renderTable() {
+        if (!state || !state.players) return '';
+
+        const phase = state.phase ? t(state.phase) : '';
+        const round = state.round || '';
+        const currentTurn = state.current_turn || '';
+        const statusText = phase + (round ? ' — ' + t('round') + ' ' + round : '') + (currentTurn ? ' — ' + currentTurn : '');
+
+        const others = state.players.filter(p => p.id !== playerID);
+
+        let cardsHTML = others.map(p => {
+            const isActive = state.current_turn === p.name;
+            const roles = (p.revealed_roles && p.revealed_roles.length > 0)
+                ? `<div class="mini-roles">${p.revealed_roles.map(r => t(r)).join(', ')}</div>`
+                : '';
+            const city = (p.city || []).map(d =>
+                `<span class="district-chip ${colorClass(d.color)}">${t(d.name)}</span>`
+            ).join(' ');
+            return `<div class="mini-card ${isActive ? 'active' : ''}">
+                <div class="mini-name">${p.name}${p.has_crown ? ' 👑' : ''} <span class="mini-stats">${p.gold}g · ${p.hand_size} ${t('cards')}</span></div>
+                ${roles}
+                ${city ? `<div class="mini-city">${city}</div>` : ''}
+            </div>`;
+        }).join('');
+
+        const logHTML = eventLog.length > 0
+            ? `<div class="table-log">${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}</div>`
+            : '';
+
+        return `<div class="table-panel">
+            <div class="table-toggle" id="table-toggle">
+                <span class="table-label">${t('table_title')} ${tableOpen ? '▲' : '▼'}</span>
+                <span class="table-status">${statusText}</span>
+            </div>
+            <div class="table-content ${tableOpen ? '' : 'collapsed'}">
+                ${cardsHTML}
+                ${logHTML}
+            </div>
+        </div>`;
     }
 
     connectWS();

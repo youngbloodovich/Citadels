@@ -130,6 +130,9 @@
             'total': 'Total',
             'pts': 'pts',
 
+            // UI — table panel
+            'table_title': 'Table',
+
             // UI — event log
             'event_log': 'Event Log',
 
@@ -299,6 +302,9 @@
             'special': 'Особые',
             'total': 'Итого',
             'pts': 'очк.',
+
+            // UI — table panel
+            'table_title': 'Стол',
 
             // UI — event log
             'event_log': 'Журнал событий',
