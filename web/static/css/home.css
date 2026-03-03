@@ -1,0 +1,114 @@
+.home-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.home-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.home-header h1 {
+    font-size: 2.2em;
+    margin-bottom: 4px;
+}
+
+.home-section {
+    margin-bottom: 16px;
+}
+
+.home-section h2 {
+    font-size: 1.1em;
+    margin-bottom: 12px;
+}
+
+.home-section p {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.home-section button {
+    width: 100%;
+}
+
+.join-row {
+    display: flex;
+    gap: 8px;
+}
+
+.join-row input {
+    flex: 1;
+    min-width: 0;
+}
+
+.join-row button {
+    width: auto;
+    flex-shrink: 0;
+}
+
+.browse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.browse-header h2 {
+    margin-bottom: 0;
+}
+
+.btn-refresh {
+    padding: 6px 14px;
+    font-size: 14px;
+}
+
+.games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.game-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #1a1a2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+.game-info {
+    flex: 1;
+}
+
+.game-id {
+    font-weight: bold;
+    color: #e0a030;
+    font-size: 15px;
+}
+
+.game-players {
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.game-names {
+    color: #888;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.game-item button {
+    padding: 6px 16px;
+    font-size: 14px;
+}
+
+.games-empty {
+    color: #666;
+    text-align: center;
+    padding: 16px;
+}

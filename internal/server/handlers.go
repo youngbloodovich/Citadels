@@ -3,6 +3,7 @@ package server
 import (
 	"citadels/internal/lobby"
 	qr "citadels/internal/qrcode"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -90,6 +91,16 @@ func (h *Handlers) HandleWS(w http.ResponseWriter, r *http.Request) {
 
 	go client.WritePump()
 	go client.ReadPump()
+}
+
+// HandleListGames returns a JSON list of active (joinable) lobbies.
+func (h *Handlers) HandleListGames(w http.ResponseWriter, r *http.Request) {
+	games := h.LobbyMgr.ListActive()
+	if games == nil {
+		games = []lobby.LobbyInfo{}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(games)
 }
 
 // HandlePlayerID returns a new player ID.

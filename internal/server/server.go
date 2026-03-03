@@ -34,6 +34,7 @@ func (s *Server) Start() error {
 	mux.Handle("/", http.FileServer(http.FS(sub)))
 
 	// API routes
+	mux.HandleFunc("/api/games", s.handlers.HandleListGames)
 	mux.HandleFunc("/api/create", s.handlers.HandleCreateGame)
 	mux.HandleFunc("/api/qr", s.handlers.HandleQR)
 	mux.HandleFunc("/api/player-id", s.handlers.HandlePlayerID)
