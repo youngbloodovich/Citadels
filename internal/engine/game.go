@@ -3,6 +3,7 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 )
 
 var (
@@ -70,13 +71,18 @@ func NewGame(players []*Player, config GameConfig, abilities *AbilityRegistry) *
 func (g *Game) StartGame() []Event {
 	var events []Event
 
+	// Randomize player order and crown holder
+	rand.Shuffle(len(g.Players), func(i, j int) {
+		g.Players[i], g.Players[j] = g.Players[j], g.Players[i]
+	})
+
 	// Give each player 4 cards
 	for _, p := range g.Players {
 		p.Hand = g.Deck.Draw(4)
 		p.Gold = 2
 	}
 
-	// First player (index 0) gets the crown
+	// Random first player gets the crown
 	g.Players[0].HasCrown = true
 
 	events = append(events, g.startDraft()...)
