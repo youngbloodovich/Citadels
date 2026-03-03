@@ -1,67 +1,57 @@
 .home-container {
-    max-width: 500px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 24px 16px;
+    padding: 40px 20px;
 }
 
 .home-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 .home-header h1 {
-    font-size: 2.2em;
-    margin-bottom: 4px;
+    font-size: 2.8em;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.btn-create {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 
 .home-section {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    padding: 20px 24px;
 }
 
 .home-section h2 {
-    font-size: 1.1em;
-    margin-bottom: 12px;
-}
-
-.home-section p {
-    color: #aaa;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-.home-section button {
-    width: 100%;
+    font-size: 1.3em;
+    margin-bottom: 14px;
 }
 
 .join-row {
     display: flex;
-    gap: 8px;
+    gap: 12px;
 }
 
 .join-row input {
     flex: 1;
     min-width: 0;
+    padding: 14px;
+    font-size: 17px;
 }
 
 .join-row button {
-    width: auto;
     flex-shrink: 0;
+    padding: 14px 28px;
+    font-size: 17px;
 }
 
 .browse-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.browse-header h2 {
-    margin-bottom: 0;
-}
-
-.btn-refresh {
-    padding: 6px 14px;
-    font-size: 14px;
+    margin-bottom: 14px;
 }
 
 .games-list {
@@ -74,7 +64,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px;
+    padding: 12px 14px;
     background: #1a1a2e;
     border: 1px solid #333;
     border-radius: 8px;
@@ -82,6 +72,7 @@
 
 .game-info {
     flex: 1;
+    min-width: 0;
 }
 
 .game-id {
@@ -96,19 +87,16 @@
     margin-top: 2px;
 }
 
-.game-names {
-    color: #888;
-    font-size: 12px;
-    margin-top: 2px;
-}
-
-.game-item button {
-    padding: 6px 16px;
-    font-size: 14px;
+.btn-join-game {
+    padding: 6px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-left: 12px;
 }
 
 .games-empty {
     color: #666;
     text-align: center;
-    padding: 16px;
+    padding: 20px;
+    font-size: 15px;
 }

@@ -52,15 +52,13 @@
             // UI — home
             'home_title': 'Citadels',
             'home_create': 'Create Game',
-            'home_create_desc': 'Start a new game as the TV host',
             'home_join': 'Join by Code',
             'home_join_placeholder': 'Game code',
             'home_join_btn': 'Join',
             'home_browse': 'Find Game',
             'home_browse_empty': 'No active games',
-            'home_browse_refresh': 'Refresh',
-            'home_players': 'Players',
             'home_join_game': 'Join',
+            'leave_lobby': 'Leave',
 
             // UI — common
             'citadels': 'Citadels',
@@ -224,15 +222,13 @@
             // UI — home
             'home_title': 'Цитадели',
             'home_create': 'Создать игру',
-            'home_create_desc': 'Начать новую игру (экран ТВ)',
             'home_join': 'Присоединиться по коду',
             'home_join_placeholder': 'Код игры',
             'home_join_btn': 'Войти',
             'home_browse': 'Найти игру',
             'home_browse_empty': 'Нет активных игр',
-            'home_browse_refresh': 'Обновить',
-            'home_players': 'Игроки',
             'home_join_game': 'Войти',
+            'leave_lobby': 'Выйти',
 
             // UI — common
             'citadels': 'Цитадели',

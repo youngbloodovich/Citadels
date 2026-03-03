@@ -20,6 +20,7 @@ const (
 // Message types: Client → Server
 const (
 	MsgJoin      = "join"
+	MsgLeave     = "leave"
 	MsgReady     = "ready"
 	MsgStartGame = "start_game"
 	// In-game actions use the same names as engine ActionType

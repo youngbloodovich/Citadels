@@ -1,4 +1,6 @@
 (function() {
+    var refreshTimer = null;
+
     function render() {
         var app = document.getElementById('home-app');
         app.innerHTML =
@@ -8,11 +10,7 @@
                     langSwitcherHTML() +
                 '</div>' +
 
-                '<div class="card home-section">' +
-                    '<h2>' + t('home_create') + '</h2>' +
-                    '<p>' + t('home_create_desc') + '</p>' +
-                    '<button id="btn-create">' + t('home_create') + '</button>' +
-                '</div>' +
+                '<button class="btn-create" id="btn-create">' + t('home_create') + '</button>' +
 
                 '<div class="card home-section">' +
                     '<h2>' + t('home_join') + '</h2>' +
@@ -25,7 +23,6 @@
                 '<div class="card home-section">' +
                     '<div class="browse-header">' +
                         '<h2>' + t('home_browse') + '</h2>' +
-                        '<button class="btn-refresh" id="btn-refresh">' + t('home_browse_refresh') + '</button>' +
                     '</div>' +
                     '<div id="games-list" class="games-list">' +
                         '<div class="games-empty">' + t('home_browse_empty') + '</div>' +
@@ -42,11 +39,9 @@
             if (e.key === 'Enter') joinByCode();
         };
 
-        document.getElementById('btn-refresh').onclick = loadGames;
+        bindLangSwitcher(function() { render(); });
 
-        bindLangSwitcher(function() { render(); loadGames(); });
-
-        loadGames();
+        startAutoRefresh();
     }
 
     function joinByCode() {
@@ -54,6 +49,12 @@
         if (code) {
             window.location.href = '/lobby.html?game=' + encodeURIComponent(code);
         }
+    }
+
+    function startAutoRefresh() {
+        if (refreshTimer) clearInterval(refreshTimer);
+        loadGames();
+        refreshTimer = setInterval(loadGames, 3000);
     }
 
     function loadGames() {
@@ -77,10 +78,9 @@
                         '<div class="game-item">' +
                             '<div class="game-info">' +
                                 '<div class="game-id">' + g.id + '</div>' +
-                                '<div class="game-players">' + t('home_players') + ': ' + g.players + '/' + g.max_players + '</div>' +
-                                (names ? '<div class="game-names">' + names + '</div>' : '') +
+                                '<div class="game-players">' + g.players + '/' + g.max_players + (names ? ' — ' + names : '') + '</div>' +
                             '</div>' +
-                            '<button onclick="window.location.href=\'/lobby.html?game=' + g.id + '\'">' + t('home_join_game') + '</button>' +
+                            '<button class="btn-join-game" onclick="window.location.href=\'/lobby.html?game=' + g.id + '\'">' + t('home_join_game') + '</button>' +
                         '</div>';
                 });
                 container.innerHTML = html;

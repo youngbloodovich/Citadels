@@ -69,6 +69,8 @@ func (h *Hub) handleMessage(msg IncomingMessage) {
 	switch msg.Envelope.Type {
 	case protocol.MsgJoin:
 		h.handleJoin(msg)
+	case protocol.MsgLeave:
+		h.handleLeave(msg)
 	case protocol.MsgReady:
 		h.handleReady(msg)
 	case protocol.MsgStartGame:
@@ -89,6 +91,14 @@ func (h *Hub) handleJoin(msg IncomingMessage) {
 		h.sendError(msg.Client, err.Error())
 		return
 	}
+	h.sendLobbyUpdate()
+}
+
+func (h *Hub) handleLeave(msg IncomingMessage) {
+	if h.lobby.Started {
+		return
+	}
+	h.lobby.Leave(msg.Client.PlayerID)
 	h.sendLobbyUpdate()
 }
 

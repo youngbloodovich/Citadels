@@ -87,6 +87,7 @@
                 </div>
                 <button id="ready-btn">${amReady ? t('not_ready') : t('ready')}</button>
                 ${players.length >= 2 ? '<br><button id="start-btn" style="margin-top:12px;">' + t('start_game') + '</button>' : ''}
+                <br><button id="leave-btn" style="margin-top:12px;background:#555;color:#ccc;">${t('leave_lobby')}</button>
             </div>
         `;
         document.getElementById('ready-btn').onclick = () => {
@@ -96,6 +97,10 @@
         if (startBtn) {
             startBtn.onclick = () => ws.send('start_game', {});
         }
+        document.getElementById('leave-btn').onclick = () => {
+            ws.send('leave', {});
+            window.location.href = '/';
+        };
         bindLangSwitcher(render);
     }
 
