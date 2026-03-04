@@ -9,6 +9,7 @@
 
     const wsUrl = `ws://${location.host}/ws?game=${gameID}&type=tv`;
     let state = null;
+    let lobbyCopied = false;
     const eventLog = [];
     const MAX_LOG = 50;
 
@@ -39,10 +40,10 @@
             <div class="qr-section">
                 <h2>${t('scan_to_join')}</h2>
                 <img src="/api/qr?game=${gameID}" alt="QR Code" width="256" height="256">
-                <p style="font-size:14px;color:#aaa;margin-top:8px;word-break:break-all;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <p style="font-size:14px;color:#aaa;margin-top:8px;word-break:break-all;text-align:center;">
                     <a href="http://${location.host}/lobby.html?game=${gameID}" target="_blank" style="color:#4a90d9;text-decoration:none;">http://${location.host}/lobby.html?game=${gameID}</a>
-                    <button id="copy-link-btn" style="padding:4px 10px;font-size:12px;cursor:pointer;background:#333;color:#ccc;border:1px solid #555;border-radius:6px;">Copy</button>
                 </p>
+                <button id="copy-link-btn" style="margin-top:6px;padding:6px 18px;font-size:13px;cursor:pointer;background:#333;color:#ccc;border:1px solid #555;border-radius:6px;transition:all 0.3s;">Copy</button>
             </div>
             <div class="lobby-players">
                 ${(data.players || []).map(p => `
@@ -54,14 +55,42 @@
             <p style="text-align:center;color:#888;">${(data.players||[]).length} ${t('players_joined')}</p>
         `;
         bindLangSwitcher(rerender);
-        document.getElementById('copy-link-btn').onclick = () => {
-            const url = 'http://' + location.host + '/lobby.html?game=' + gameID;
-            navigator.clipboard.writeText(url).then(() => {
-                const btn = document.getElementById('copy-link-btn');
-                btn.textContent = '\u2713';
-                setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
-            });
+        const copyBtn = document.getElementById('copy-link-btn');
+        const joinUrl = 'http://' + location.host + '/lobby.html?game=' + gameID;
+        copyBtn.onclick = () => copyLink(joinUrl);
+        if (!lobbyCopied) { lobbyCopied = true; copyLink(joinUrl); }
+    }
+
+    function copyLink(url) {
+        const btn = document.getElementById('copy-link-btn');
+        if (!btn) return;
+        // Fallback for non-secure contexts (HTTP over LAN)
+        function fallbackCopy() {
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            ta.style.cssText = 'position:fixed;opacity:0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+        const done = () => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#27ae60';
+            btn.style.borderColor = '#27ae60';
+            btn.style.color = '#fff';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.style.background = '#333';
+                btn.style.borderColor = '#555';
+                btn.style.color = '#ccc';
+            }, 2000);
         };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done).catch(() => { fallbackCopy(); done(); });
+        } else {
+            fallbackCopy(); done();
+        }
     }
 
     function renderGame() {
