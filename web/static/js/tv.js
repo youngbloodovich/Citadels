@@ -58,7 +58,7 @@
         const copyBtn = document.getElementById('copy-link-btn');
         const joinUrl = 'http://' + location.host + '/lobby.html?game=' + gameID;
         copyBtn.onclick = () => copyLink(joinUrl);
-        if (!lobbyCopied) { lobbyCopied = true; copyLink(joinUrl); }
+        if (!lobbyCopied) { lobbyCopied = true; setTimeout(() => copyLink(joinUrl), 400); }
     }
 
     function copyLink(url) {
@@ -76,8 +76,8 @@
         }
         const done = () => {
             btn.textContent = 'Copied!';
-            btn.style.background = '#27ae60';
-            btn.style.borderColor = '#27ae60';
+            btn.style.background = '#e0a030';
+            btn.style.borderColor = '#e0a030';
             btn.style.color = '#fff';
             setTimeout(() => {
                 btn.textContent = 'Copy';
