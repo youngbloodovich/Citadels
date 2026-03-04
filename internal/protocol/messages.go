@@ -31,6 +31,7 @@ const (
 	MsgBuild           = "build"
 	MsgAbility         = "ability"
 	MsgEndTurn         = "end_turn"
+	MsgCollectGold       = "collect_gold"
 	MsgLabDiscard        = "lab_discard"
 	MsgSmithyDraw        = "smithy_draw"
 	MsgGraveyardRespond  = "graveyard_respond"

@@ -133,6 +133,9 @@
             // UI — table panel
             'table_title': 'Table',
 
+            // UI — collect gold
+            'collect_gold': 'Collect Gold ({count})',
+
             // UI — event log
             'event_log': 'Event Log',
 
@@ -305,6 +308,9 @@
 
             // UI — table panel
             'table_title': 'Стол',
+
+            // UI — collect gold
+            'collect_gold': 'Собрать золото ({count})',
 
             // UI — event log
             'event_log': 'Журнал событий',

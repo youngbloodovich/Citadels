@@ -70,21 +70,6 @@ func (g *Game) CallCharacter(role CharacterRole) []Event {
 		events = append(events, abilityEvents...)
 	}
 
-	// Collect gold for matching districts
-	if color := role.Color(); color != ColorNone {
-		count := owner.CityColorCount(color)
-		if count > 0 {
-			owner.Gold += count
-			events = append(events, Event{
-				Type:   EventGoldCollected,
-				Player: ownerID,
-				Data: map[string]interface{}{
-					"color": color.String(), "count": count,
-				},
-			})
-		}
-	}
-
 	// Set up player turn
 	g.CurrentTurnPlayer = ownerID
 	g.CurrentTurnRole = role
@@ -93,6 +78,7 @@ func (g *Game) CallCharacter(role CharacterRole) []Event {
 	owner.UsedAbility = false
 	owner.UsedLab = false
 	owner.UsedSmithy = false
+	owner.CollectedGold = false
 	g.Phase = PhasePlayerTurn
 
 	events = append(events, Event{

@@ -186,6 +186,9 @@
                 content += `<button id="btn-gold">${t('take_2_gold')}</button>`;
                 content += `<button id="btn-draw">${t('draw_cards')}</button>`;
             }
+            if (state.can_collect_gold) {
+                content += `<button id="btn-collect-gold">${t('collect_gold', { count: state.collect_gold_amount })}</button>`;
+            }
             if (state.can_use_ability && state.valid_targets && state.valid_targets.length > 0) {
                 content += `<button id="btn-ability">${t('use_ability')}</button>`;
             }
@@ -375,6 +378,9 @@
 
         const btnDraw = document.getElementById('btn-draw');
         if (btnDraw) btnDraw.onclick = () => ws.send('draw_cards', {});
+
+        const btnCollectGold = document.getElementById('btn-collect-gold');
+        if (btnCollectGold) btnCollectGold.onclick = () => ws.send('collect_gold', {});
 
         const btnEnd = document.getElementById('btn-end');
         if (btnEnd) btnEnd.onclick = () => ws.send('end_turn', {});

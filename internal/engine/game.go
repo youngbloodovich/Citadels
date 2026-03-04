@@ -107,6 +107,7 @@ func (g *Game) startDraft() []Event {
 		p.UsedAbility = false
 		p.UsedLab = false
 		p.UsedSmithy = false
+		p.CollectedGold = false
 	}
 
 	g.Draft = SetupDraft(g.Players)
@@ -141,6 +142,8 @@ func (g *Game) Apply(playerID string, action Action) ([]Event, error) {
 		return g.applyAbility(playerID, action)
 	case ActionEndTurn:
 		return g.applyEndTurn(playerID)
+	case ActionCollectGold:
+		return g.applyCollectGold(playerID)
 	case ActionLabDiscard:
 		return g.applyLabDiscard(playerID, action)
 	case ActionSmithyDraw:
@@ -464,6 +467,34 @@ func (g *Game) applyEndTurn(playerID string) ([]Event, error) {
 	return events, nil
 }
 
+func (g *Game) applyCollectGold(playerID string) ([]Event, error) {
+	if g.Phase != PhasePlayerTurn {
+		return nil, ErrWrongPhase
+	}
+	if g.CurrentTurnPlayer != playerID {
+		return nil, ErrNotYourTurn
+	}
+	p := g.GetPlayer(playerID)
+	if p.CollectedGold {
+		return nil, fmt.Errorf("already collected gold this turn")
+	}
+	color := g.CurrentTurnRole.Color()
+	if color == ColorNone {
+		return nil, fmt.Errorf("this character has no color")
+	}
+	count := p.CityColorCount(color)
+	if count == 0 {
+		return nil, fmt.Errorf("no matching districts")
+	}
+	p.Gold += count
+	p.CollectedGold = true
+	return []Event{
+		{Type: EventGoldCollected, Player: playerID, Data: map[string]interface{}{
+			"color": color.String(), "count": count,
+		}},
+	}, nil
+}
+
 func (g *Game) applyLabDiscard(playerID string, action Action) ([]Event, error) {
 	if g.Phase != PhasePlayerTurn {
 		return nil, ErrWrongPhase
@@ -650,6 +681,8 @@ type PlayerViewData struct {
 	DrawnCards      []District          `json:"drawn_cards,omitempty"`
 	KeepCount       int                 `json:"keep_count,omitempty"`
 	ValidTargets    []string            `json:"valid_targets,omitempty"`
+	CanCollectGold    bool              `json:"can_collect_gold,omitempty"`
+	CollectGoldAmount int              `json:"collect_gold_amount,omitempty"`
 	CanUseLab       bool                `json:"can_use_lab,omitempty"`
 	CanUseSmithy    bool                `json:"can_use_smithy,omitempty"`
 	GraveyardChoice *GraveyardChoiceView `json:"graveyard_choice,omitempty"`
@@ -704,6 +737,17 @@ func (g *Game) ViewFor(playerID string) PlayerViewData {
 	if g.Phase == PhaseDrawChoice && g.CurrentTurnPlayer == playerID {
 		pv.DrawnCards = g.DrawnCards
 		pv.KeepCount = g.DrawCount
+	}
+
+	// Collect gold for matching districts (manual action)
+	if pv.IsMyTurn && g.Phase == PhasePlayerTurn && !p.CollectedGold {
+		if color := g.CurrentTurnRole.Color(); color != ColorNone {
+			count := p.CityColorCount(color)
+			if count > 0 {
+				pv.CanCollectGold = true
+				pv.CollectGoldAmount = count
+			}
+		}
 	}
 
 	// Laboratory / Smithy (available during own turn)

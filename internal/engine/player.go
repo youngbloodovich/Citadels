@@ -16,8 +16,9 @@ type Player struct {
 	BuiltCount  int  `json:"-"` // districts built this turn
 	TookAction  bool `json:"-"` // took gold/drew cards this turn
 	UsedAbility bool `json:"-"` // used character ability this turn
-	UsedLab     bool `json:"-"` // used Laboratory this turn
-	UsedSmithy  bool `json:"-"` // used Smithy this turn
+	UsedLab        bool `json:"-"` // used Laboratory this turn
+	UsedSmithy     bool `json:"-"` // used Smithy this turn
+	CollectedGold  bool `json:"-"` // collected color-based gold this turn
 }
 
 func NewPlayer(id, name string) *Player {

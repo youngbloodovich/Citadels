@@ -13,6 +13,7 @@ const (
 	ActionBuild       ActionType = "build"
 	ActionAbility     ActionType = "ability"
 	ActionEndTurn     ActionType = "end_turn"
+	ActionCollectGold       ActionType = "collect_gold"       // Collect gold for matching district colors
 	ActionLabDiscard        ActionType = "lab_discard"        // Laboratory: discard card for 1 gold
 	ActionSmithyDraw        ActionType = "smithy_draw"        // Smithy: pay 2 gold, draw 3 cards
 	ActionGraveyardRespond  ActionType = "graveyard_respond"  // Graveyard: accept/decline destroyed district
