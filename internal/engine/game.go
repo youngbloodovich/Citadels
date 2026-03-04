@@ -445,6 +445,9 @@ func (g *Game) applyEndTurn(playerID string) ([]Event, error) {
 	if g.CurrentTurnPlayer != playerID {
 		return nil, ErrNotYourTurn
 	}
+	if g.PendingGraveyard != nil {
+		return nil, fmt.Errorf("waiting for Graveyard response")
+	}
 
 	events := []Event{
 		{Type: EventTurnEnd, Player: playerID, Data: map[string]interface{}{

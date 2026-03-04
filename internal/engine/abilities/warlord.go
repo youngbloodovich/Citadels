@@ -102,12 +102,18 @@ func (w Warlord) Apply(g *engine.Game, playerID string, action engine.Action) ([
 		}},
 	}
 
-	// Graveyard: owner can pay 1 gold to take destroyed district into hand
-	// This is handled as a separate prompt if the target has Graveyard
-	if target.CityHas("Graveyard") && target.Gold >= 1 {
-		g.PendingGraveyard = &engine.GraveyardPending{
-			PlayerID: target.ID,
-			District: d,
+	// Graveyard: any player (except the Warlord) who has Graveyard can pay 1 gold
+	// to take the destroyed district into their hand
+	for _, p := range g.Players {
+		if p.ID == playerID {
+			continue // Warlord can't use their own Graveyard
+		}
+		if p.CityHas("Graveyard") && p.Gold >= 1 {
+			g.PendingGraveyard = &engine.GraveyardPending{
+				PlayerID: p.ID,
+				District: d,
+			}
+			break // only one Graveyard can exist
 		}
 	}
 
