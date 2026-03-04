@@ -199,11 +199,38 @@
             case 'gold_taken':
                 return { text: t('ev_gold_taken', { player: pName(ev.player), gold: d.gold }), css: 'ev-action' };
             case 'cards_drawn':
-                return { text: t('ev_cards_drawn', { player: pName(ev.player) }), css: 'ev-action' };
+                return { text: t('ev_cards_drawn', { player: pName(ev.player), count: d.count }), css: 'ev-action' };
             case 'district_built':
                 return { text: t('ev_district_built', { player: pName(ev.player), district: t(d.district), cost: d.cost }), css: 'ev-build' };
-            case 'ability_used':
-                return { text: t('ev_ability_used', { player: pName(ev.player), ability: t(d.ability) }), css: 'ev-ability' };
+            case 'ability_used': {
+                const p = pName(ev.player);
+                switch (d.ability) {
+                    case 'assassin':
+                        return { text: t('ev_assassin_kill', { player: p, role: t(d.target_role) }), css: 'ev-danger' };
+                    case 'thief':
+                        return { text: t('ev_thief_rob', { player: p, role: t(d.target_role) }), css: 'ev-danger' };
+                    case 'magician':
+                        if (d.mode === 'swap_hand')
+                            return { text: t('ev_magician_swap', { player: p, target: d.target }), css: 'ev-ability' };
+                        return { text: t('ev_magician_discard', { player: p, count: d.count }), css: 'ev-ability' };
+                    case 'merchant':
+                        return { text: t('ev_merchant_bonus', { player: p }), css: 'ev-ability' };
+                    case 'architect':
+                        return { text: t('ev_architect_draw', { player: p, count: d.extra_cards }), css: 'ev-ability' };
+                    case 'warlord':
+                        return { text: t('ev_warlord_destroy', { player: p, district: t(d.district), target: d.target, cost: d.cost }), css: 'ev-danger' };
+                    case 'laboratory':
+                        return { text: t('ev_lab_discard', { player: p, district: t(d.discarded) }), css: 'ev-ability' };
+                    case 'smithy':
+                        return { text: t('ev_smithy_draw', { player: p, count: d.cards_drawn }), css: 'ev-ability' };
+                    case 'graveyard':
+                        if (d.action === 'accept')
+                            return { text: t('ev_graveyard_accept', { player: p, district: t(d.district) }), css: 'ev-ability' };
+                        return { text: t('ev_graveyard_decline', { player: p, district: t(d.district) }), css: 'ev-ability' };
+                    default:
+                        return { text: p + ' used ' + d.ability, css: 'ev-ability' };
+                }
+            }
             case 'gold_collected':
                 return { text: t('ev_gold_collected', { player: pName(ev.player), count: d.count, color: t(d.color) }), css: 'ev-action' };
             case 'crown_passed':
