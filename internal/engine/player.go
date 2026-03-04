@@ -55,14 +55,14 @@ func (p *Player) CityColorCount(color DistrictColor) int {
 }
 
 // HasAllColors returns true if the player's city contains all 5 district colors.
-// School of Magic and Haunted City each count as any color of your choice.
+// Haunted City counts as any color for scoring. School of Magic does NOT.
 func (p *Player) HasAllColors() bool {
 	colors := map[DistrictColor]bool{}
 	wildcards := 0
 	for _, d := range p.City {
-		if d.Name == "School of Magic" || d.Name == "Haunted City" {
+		if d.Name == "Haunted City" {
 			wildcards++
-			continue // don't count their natural Special color; they fill any missing
+			continue // don't count natural Special color; it fills any missing
 		}
 		colors[d.Color] = true
 	}
