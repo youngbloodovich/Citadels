@@ -87,6 +87,13 @@ func (h *Hub) handleJoin(msg IncomingMessage) {
 		return
 	}
 	msg.Client.PlayerID = join.PlayerID
+
+	// Game already in progress — just update client PlayerID, state was sent on register
+	if h.lobby.Started {
+		h.sendStateToClient(msg.Client)
+		return
+	}
+
 	if err := h.lobby.Join(join.PlayerID, join.Name); err != nil {
 		h.sendError(msg.Client, err.Error())
 		return
