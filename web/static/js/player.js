@@ -546,6 +546,9 @@
                         }).join('')}
                     </tbody>
                 </table>
+                <div style="text-align:center;margin-top:20px;">
+                    <button onclick="location.href='/'">${t('exit_game')}</button>
+                </div>
             </div>
         `;
         bindLangSwitcher(render);

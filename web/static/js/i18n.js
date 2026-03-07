@@ -129,6 +129,7 @@
             'special': 'Special',
             'total': 'Total',
             'pts': 'pts',
+            'exit_game': 'Exit',
 
             // UI — table panel
             'table_title': 'Table',
@@ -315,6 +316,7 @@
             'special': 'Особые',
             'total': 'Итого',
             'pts': 'очк.',
+            'exit_game': 'Выйти',
 
             // UI — table panel
             'table_title': 'Стол',
