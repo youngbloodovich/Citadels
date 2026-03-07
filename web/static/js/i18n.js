@@ -180,6 +180,9 @@
             'effect_University': 'Worth 8 points instead of 6 in final scoring',
             'effect_Dragon Gate': 'Worth 8 points instead of 6 in final scoring',
 
+            // Timer
+            'time_left': '{seconds}s',
+
             // Phases
             'DraftPick': 'Draft',
             'PlayerTurn': 'Turn',
@@ -366,6 +369,9 @@
             'effect_Library': 'При взятии карт оставить все себе',
             'effect_University': 'Приносит 8 очков вместо 6 при подсчёте',
             'effect_Dragon Gate': 'Приносит 8 очков вместо 6 при подсчёте',
+
+            // Timer
+            'time_left': '{seconds}с',
 
             // Phases
             'DraftPick': 'Драфт',

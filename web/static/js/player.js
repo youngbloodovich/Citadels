@@ -14,6 +14,7 @@
     let tableOpen = true;
     const eventLog = [];
     const MAX_LOG = 30;
+    let timerInterval = null;
 
     if (!gameID) {
         document.body.innerHTML = '<div class="container"><h1>' + t('no_game_id') + '</h1></div>';
@@ -151,19 +152,19 @@
         // Draft phase
         if (state.phase === 'DraftPick' && state.draft_choices && state.draft_choices.length > 0) {
             content += `<div class="section">
-                <div class="section-title">${t('choose_character')}</div>
+                <div class="section-title">${t('choose_character')} ${timerBadgeHTML()}</div>
                 <div class="draft-choices">
                     ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}">${t(c)}</div>`).join('')}
                 </div>
             </div>`;
         } else if (state.phase === 'DraftPick') {
-            content += `<div class="waiting">${t('waiting_for_pick')}</div>`;
+            content += `<div class="waiting">${t('waiting_for_pick')} ${timerBadgeHTML()}</div>`;
         }
 
         // Draw choice
         if (state.phase === 'DrawChoice' && state.drawn_cards) {
             content += `<div class="section">
-                <div class="section-title">${t('choose_card_keep')}</div>
+                <div class="section-title">${t('choose_card_keep')} ${timerBadgeHTML()}</div>
                 <div class="draw-choices">
                     ${state.drawn_cards.map((d, i) => `
                         <div class="draw-card ${colorClass(d.color)}" data-idx="${i}">
@@ -178,7 +179,7 @@
 
         // Player turn
         if (state.is_my_turn && state.phase === 'PlayerTurn') {
-            content += `<div class="turn-indicator">${t('your_turn')} (${t(state.current_role)})</div>`;
+            content += `<div class="turn-indicator">${t('your_turn')} (${t(state.current_role)}) ${timerBadgeHTML()}</div>`;
 
             // Action buttons
             content += '<div class="action-buttons">';
@@ -298,7 +299,7 @@
                 </div>`;
             }
         } else if (state.phase === 'PlayerTurn' && !state.is_my_turn) {
-            content += `<div class="waiting">${t('waiting')} ${state.current_role ? t(state.current_role) : ''} ${t('waiting_playing')}</div>`;
+            content += `<div class="waiting">${t('waiting')} ${state.current_role ? t(state.current_role) : ''} ${t('waiting_playing')} ${timerBadgeHTML()}</div>`;
         }
 
         // Hand (non-turn view)
@@ -322,7 +323,7 @@
         // Graveyard prompt (shown regardless of whose turn it is)
         if (state.graveyard_choice) {
             content += `<div class="section graveyard-prompt" style="background:#2d1b3d;border:2px solid #9b59b6;border-radius:8px;padding:12px;margin:8px 0;">
-                <div style="margin-bottom:8px;">${t('graveyard_prompt', { district: t(state.graveyard_choice.district_name) })}</div>
+                <div style="margin-bottom:8px;">${t('graveyard_prompt', { district: t(state.graveyard_choice.district_name) })} ${timerBadgeHTML()}</div>
                 <div style="display:flex;gap:8px;">
                     <button id="btn-graveyard-accept" style="flex:1;background:#27ae60;">${t('graveyard_accept')}</button>
                     <button id="btn-graveyard-decline" style="flex:1;background:#c0392b;">${t('graveyard_decline')}</button>
@@ -344,6 +345,7 @@
         app.innerHTML = content;
         bindActions();
         bindLangSwitcher(render);
+        startTimerCountdown();
         const logList = document.querySelector('.table-log');
         if (logList) logList.scrollTop = logList.scrollHeight;
     }
@@ -708,6 +710,28 @@
                 ${logHTML}
             </div>
         </div>`;
+    }
+
+    function timerBadgeHTML() {
+        if (!state || !state.timer_deadline) return '';
+        const remaining = Math.max(0, Math.ceil((state.timer_deadline - Date.now()) / 1000));
+        const urgent = remaining <= 10 ? ' urgent' : '';
+        return `<span class="timer-badge${urgent}">${t('time_left', { seconds: remaining })}</span>`;
+    }
+
+    function startTimerCountdown() {
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+        if (!state || !state.timer_deadline) return;
+        timerInterval = setInterval(() => {
+            const badges = document.querySelectorAll('.timer-badge');
+            if (badges.length === 0) { clearInterval(timerInterval); timerInterval = null; return; }
+            const remaining = Math.max(0, Math.ceil((state.timer_deadline - Date.now()) / 1000));
+            const urgent = remaining <= 10;
+            badges.forEach(b => {
+                b.textContent = t('time_left', { seconds: remaining });
+                b.classList.toggle('urgent', urgent);
+            });
+        }, 1000);
     }
 
     connectWS();

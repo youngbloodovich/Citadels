@@ -12,6 +12,7 @@
     let lobbyCopied = false;
     const eventLog = [];
     const MAX_LOG = 50;
+    let timerInterval = null;
 
     const ws = new WS(wsUrl,
         (env) => {
@@ -110,7 +111,7 @@
                     ${state.draft_face_up && state.draft_face_up.length > 0 ?
                         `<div class="face-up">${t('face_up')}: ${state.draft_face_up.map(c => t(c)).join(', ')}</div>` : ''}
                     <p>${t('available_chars')}: ${state.draft_available} ${t('characters')}</p>
-                    ${state.draft_picker ? `<p style="font-size:24px;margin-top:12px;">${t('picking')}: <strong>${state.draft_picker}</strong></p>` : ''}
+                    ${state.draft_picker ? `<p style="font-size:24px;margin-top:12px;">${t('picking')}: <strong>${state.draft_picker}</strong> ${timerBadgeHTML()}</p>` : ''}
                 </div>
             `;
         }
@@ -119,7 +120,7 @@
         if (state.phase === 'PlayerTurn' || state.phase === 'DrawChoice' || state.phase === 'Ability') {
             callHTML = `
                 <div class="call-banner">
-                    ${state.current_role ? t(state.current_role) : ''} ${state.current_turn ? `- ${state.current_turn}` : ''}
+                    ${state.current_role ? t(state.current_role) : ''} ${state.current_turn ? `- ${state.current_turn}` : ''} ${timerBadgeHTML()}
                 </div>
             `;
         }
@@ -148,6 +149,7 @@
         const logList = document.getElementById('event-log-list');
         if (logList) logList.scrollTop = logList.scrollHeight;
         bindLangSwitcher(rerender);
+        startTimerCountdown();
     }
 
     function renderPlayerCard(p) {
@@ -287,6 +289,28 @@
             default:
                 return null;
         }
+    }
+
+    function timerBadgeHTML() {
+        if (!state || !state.timer_deadline) return '';
+        const remaining = Math.max(0, Math.ceil((state.timer_deadline - Date.now()) / 1000));
+        const urgent = remaining <= 10 ? ' urgent' : '';
+        return `<span class="timer-badge${urgent}">${t('time_left', { seconds: remaining })}</span>`;
+    }
+
+    function startTimerCountdown() {
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+        if (!state || !state.timer_deadline) return;
+        timerInterval = setInterval(() => {
+            const badges = document.querySelectorAll('.timer-badge');
+            if (badges.length === 0) { clearInterval(timerInterval); timerInterval = null; return; }
+            const remaining = Math.max(0, Math.ceil((state.timer_deadline - Date.now()) / 1000));
+            const urgent = remaining <= 10;
+            badges.forEach(b => {
+                b.textContent = t('time_left', { seconds: remaining });
+                b.classList.toggle('urgent', urgent);
+            });
+        }, 1000);
     }
 
     // Initial lobby render

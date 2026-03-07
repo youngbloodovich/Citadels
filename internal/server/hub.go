@@ -8,8 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"sync"
+	"time"
 )
+
+const turnTimerDuration = 60 * time.Second
 
 // Hub manages WebSocket connections and game state for one game room.
 type Hub struct {
@@ -22,6 +26,9 @@ type Hub struct {
 	unregister chan *Client
 	incoming   chan IncomingMessage
 	quit       chan struct{}
+
+	turnTimer     *time.Timer
+	timerDeadline int64 // Unix milliseconds
 }
 
 func NewHub(gameID string, lob *lobby.Lobby) *Hub {
@@ -67,6 +74,8 @@ func (h *Hub) Run() {
 
 func (h *Hub) handleMessage(msg IncomingMessage) {
 	switch msg.Envelope.Type {
+	case "timer_expired":
+		h.handleTimerExpired()
 	case protocol.MsgJoin:
 		h.handleJoin(msg)
 	case protocol.MsgLeave:
@@ -215,8 +224,16 @@ func (h *Hub) broadcastEvents(events []engine.Event) {
 
 func (h *Hub) broadcastState() {
 	if h.game == nil {
+		h.stopTimer()
 		return
 	}
+
+	if h.isActionablePhase() {
+		h.startTimer()
+	} else {
+		h.stopTimer()
+	}
+
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
@@ -231,10 +248,12 @@ func (h *Hub) sendStateToClient(client *Client) {
 	}
 	if client.Type == ClientTV {
 		pv := h.game.PublicView()
+		pv.TimerDeadline = h.timerDeadline
 		env := protocol.MustEnvelope(protocol.MsgGameState, pv)
 		client.SendEnvelope(env)
 	} else {
 		view := h.game.ViewFor(client.PlayerID)
+		view.TimerDeadline = h.timerDeadline
 		env := protocol.MustEnvelope(protocol.MsgPlayerState, view)
 		client.SendEnvelope(env)
 	}
@@ -275,4 +294,105 @@ func (h *Hub) broadcastAll(env protocol.Envelope) {
 func (h *Hub) sendError(client *Client, message string) {
 	env := protocol.MustEnvelope(protocol.MsgError, protocol.ErrorMsg{Message: message})
 	client.SendEnvelope(env)
+}
+
+// isActionablePhase returns true if the current game phase requires player input.
+func (h *Hub) isActionablePhase() bool {
+	if h.game == nil {
+		return false
+	}
+	switch h.game.Phase {
+	case engine.PhaseDraftPick, engine.PhaseDrawChoice, engine.PhasePlayerTurn:
+		return true
+	default:
+		return h.game.PendingGraveyard != nil
+	}
+}
+
+func (h *Hub) startTimer() {
+	if h.turnTimer != nil {
+		h.turnTimer.Stop()
+	}
+	h.timerDeadline = time.Now().Add(turnTimerDuration).UnixMilli()
+	h.turnTimer = time.AfterFunc(turnTimerDuration, func() {
+		h.incoming <- IncomingMessage{
+			Envelope: protocol.Envelope{Type: "timer_expired"},
+		}
+	})
+}
+
+func (h *Hub) stopTimer() {
+	if h.turnTimer != nil {
+		h.turnTimer.Stop()
+		h.turnTimer = nil
+	}
+	h.timerDeadline = 0
+}
+
+func (h *Hub) handleTimerExpired() {
+	if h.game == nil {
+		return
+	}
+
+	var events []engine.Event
+	var err error
+
+	switch {
+	case h.game.PendingGraveyard != nil:
+		// Auto-decline graveyard
+		pid := h.game.PendingGraveyard.PlayerID
+		events, err = h.game.Apply(pid, engine.Action{
+			Type:      engine.ActionGraveyardRespond,
+			ExtraData: "decline",
+		})
+
+	case h.game.Phase == engine.PhaseDraftPick && h.game.Draft != nil:
+		// Auto-pick random available character
+		pid := h.game.Draft.CurrentPickerID()
+		if pid == "" {
+			return
+		}
+		role := h.game.Draft.Available[rand.Intn(len(h.game.Draft.Available))]
+		events, err = h.game.Apply(pid, engine.Action{
+			Type:      engine.ActionDraftPick,
+			Character: role,
+		})
+
+	case h.game.Phase == engine.PhaseDrawChoice:
+		// Auto-keep first card
+		pid := h.game.CurrentTurnPlayer
+		events, err = h.game.Apply(pid, engine.Action{
+			Type:  engine.ActionKeepCard,
+			Index: 0,
+		})
+
+	case h.game.Phase == engine.PhasePlayerTurn:
+		pid := h.game.CurrentTurnPlayer
+		p := h.game.GetPlayer(pid)
+		if p == nil {
+			return
+		}
+		if !p.TookAction {
+			// Take gold first
+			events, err = h.game.Apply(pid, engine.Action{Type: engine.ActionTakeGold})
+			if err != nil {
+				log.Printf("timer auto take_gold error: %v", err)
+				return
+			}
+			h.broadcastEvents(events)
+		}
+		// End turn
+		events, err = h.game.Apply(pid, engine.Action{Type: engine.ActionEndTurn})
+
+	default:
+		return
+	}
+
+	if err != nil {
+		log.Printf("timer auto-action error: %v", err)
+		return
+	}
+
+	h.broadcastEvents(events)
+	h.broadcastState()
 }

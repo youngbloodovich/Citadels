@@ -608,6 +608,7 @@ type PublicViewData struct {
 	DraftAvailable  int                    `json:"draft_available,omitempty"`
 	Scores          []ScoreEntry           `json:"scores,omitempty"`
 	DeckSize        int                    `json:"deck_size"`
+	TimerDeadline   int64                  `json:"timer_deadline,omitempty"`
 }
 
 type PublicPlayerData struct {
