@@ -81,6 +81,8 @@ func BaseDistricts() []District {
 	add(1, "Library", ColorSpecial, 6)
 	add(1, "University", ColorSpecial, 6)
 	add(1, "Dragon Gate", ColorSpecial, 6)
+	add(1, "Imperial Treasury", ColorSpecial, 4)
+	add(1, "Map Room", ColorSpecial, 5)
 
 	return cards
 }

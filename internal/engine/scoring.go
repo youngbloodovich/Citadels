@@ -46,6 +46,10 @@ func (g *Game) CalculateScores() []ScoreEntry {
 				e.SpecialBonus += 2 // worth 8 instead of 6
 			case "Dragon Gate":
 				e.SpecialBonus += 2 // worth 8 instead of 6
+			case "Imperial Treasury":
+				e.SpecialBonus += p.Gold // 1 point per gold
+			case "Map Room":
+				e.SpecialBonus += len(p.Hand) // 1 point per card in hand
 			}
 		}
 

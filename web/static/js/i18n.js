@@ -41,6 +41,8 @@
             'Library': 'Library',
             'University': 'University',
             'Dragon Gate': 'Dragon Gate',
+            'Imperial Treasury': 'Imperial Treasury',
+            'Map Room': 'Map Room',
 
             // Colors
             'Noble': 'Noble',
@@ -183,6 +185,8 @@
             'effect_Library': 'When drawing cards, keep all of them',
             'effect_University': 'Worth 8 points instead of 6 in final scoring',
             'effect_Dragon Gate': 'Worth 8 points instead of 6 in final scoring',
+            'effect_Imperial Treasury': '+1 point per gold you have at end of game',
+            'effect_Map Room': '+1 point per card in hand at end of game',
 
             // Timer
             'time_left': '{seconds}s',
@@ -235,6 +239,8 @@
             'Library': 'Библиотека',
             'University': 'Университет',
             'Dragon Gate': 'Врата дракона',
+            'Imperial Treasury': 'Имперская казна',
+            'Map Room': 'Собрание карт',
 
             // Colors
             'Noble': 'Дворянский',
@@ -377,6 +383,8 @@
             'effect_Library': 'При взятии карт оставить все себе',
             'effect_University': 'Приносит 8 очков вместо 6 при подсчёте',
             'effect_Dragon Gate': 'Приносит 8 очков вместо 6 при подсчёте',
+            'effect_Imperial Treasury': '+1 очко за каждое золото при подсчёте',
+            'effect_Map Room': '+1 очко за каждую карту в руке при подсчёте',
 
             // Timer
             'time_left': '{seconds}с',
