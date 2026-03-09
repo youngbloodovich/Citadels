@@ -10,7 +10,8 @@
     const wsUrl = `ws://${location.host}/ws?game=${gameID}&type=tv`;
     let state = null;
     let lobbyCopied = false;
-    const eventLog = [];
+    const logKey = 'citadels_log_tv_' + gameID;
+    const eventLog = JSON.parse(sessionStorage.getItem(logKey) || '[]');
     const MAX_LOG = 50;
     let timerInterval = null;
 
@@ -228,6 +229,7 @@
         if (entry) {
             eventLog.push(entry);
             if (eventLog.length > MAX_LOG) eventLog.shift();
+            sessionStorage.setItem(logKey, JSON.stringify(eventLog));
             renderGame();
         }
     }
