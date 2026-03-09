@@ -11,7 +11,6 @@
     let magicianMode = null; // 'swap_hand' | 'discard_draw' | null
     let selectedDiscardIndices = new Set();
     let labMode = false;
-    let tableOpen = true;
     const logKey = 'citadels_log_' + gameID;
     const eventLog = JSON.parse(sessionStorage.getItem(logKey) || '[]');
     const MAX_LOG = 30;
@@ -352,12 +351,6 @@
     }
 
     function bindActions() {
-        // Table toggle
-        const tableToggle = document.getElementById('table-toggle');
-        if (tableToggle) {
-            tableToggle.onclick = () => { tableOpen = !tableOpen; render(); };
-        }
-
         // Draft pick
         document.querySelectorAll('.draft-choice').forEach(el => {
             el.onclick = () => {
@@ -700,15 +693,15 @@
         }).join('');
 
         const logHTML = eventLog.length > 0
-            ? `<div class="table-log">${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}</div>`
+            ? `<div class="table-log-title">${t('event_log')}</div><div class="table-log">${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}</div>`
             : '';
 
         return `<div class="table-panel">
-            <div class="table-toggle" id="table-toggle">
-                <span class="table-label">${t('table_title')} ${tableOpen ? '▲' : '▼'}</span>
+            <div class="table-header">
+                <span class="table-label">${t('table_title')}</span>
                 <span class="table-status">${statusText}</span>
             </div>
-            <div class="table-content ${tableOpen ? '' : 'collapsed'}">
+            <div class="table-content">
                 ${cardsHTML}
                 ${logHTML}
             </div>

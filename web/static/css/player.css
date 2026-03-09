@@ -135,18 +135,18 @@ body { font-size: 16px; }
 
 /* Table panel (other players view) */
 .table-panel { background: #16213e; border-radius: 12px; margin: 0 0 12px; overflow: hidden; }
-.table-toggle { display: flex; cursor: pointer; padding: 10px 14px; justify-content: space-between; align-items: center; user-select: none; }
-.table-toggle .table-label { font-weight: bold; font-size: 14px; }
+.table-header { display: flex; padding: 10px 14px; justify-content: space-between; align-items: center; }
+.table-header .table-label { font-weight: bold; font-size: 14px; }
 .table-status { font-size: 12px; color: #aaa; }
 .table-content { padding: 10px 14px; }
-.table-content.collapsed { display: none; }
 .mini-card { padding: 8px 10px; border-left: 3px solid #333; margin-bottom: 6px; font-size: 13px; }
 .mini-card.active { border-left-color: #e0a030; }
 .mini-card .mini-name { font-weight: bold; }
 .mini-card .mini-stats { color: #aaa; font-size: 12px; }
 .mini-card .mini-city { font-size: 11px; color: #888; margin-top: 2px; }
 .mini-card .mini-roles { color: #9b59b6; font-size: 12px; }
-.table-log { max-height: 120px; overflow-y: auto; margin-top: 8px; border-top: 1px solid #333; padding-top: 8px; }
+.table-log-title { font-size: 13px; font-weight: bold; color: #e0a030; margin-top: 10px; padding-top: 8px; border-top: 1px solid #333; margin-bottom: 6px; }
+.table-log { max-height: 120px; overflow-y: auto; }
 .table-log .event-entry { font-size: 12px; color: #aaa; padding: 1px 0; }
 .table-log .ev-danger { color: #d9534f; }
 .table-log .ev-build { color: #45a049; }
