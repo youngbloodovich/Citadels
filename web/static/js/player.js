@@ -143,7 +143,7 @@
         if (state.characters && state.characters.length > 0) {
             content += `<div class="section">
                 <div class="section-title">${t('your_characters')}</div>
-                <div style="color:#9b59b6;font-size:18px;">${state.characters.map(c => t(c)).join(', ')}</div>
+                <div class="character-list">${state.characters.map(c => `<div class="character-item"><span class="character-name">${t(c)}</span>${characterAbility(c) ? `<span class="character-ability">${characterAbility(c)}</span>` : ''}</div>`).join('')}</div>
             </div>`;
         }
 
@@ -152,7 +152,7 @@
             content += `<div class="section">
                 <div class="section-title">${t('choose_character')} ${timerBadgeHTML()}</div>
                 <div class="draft-choices">
-                    ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}">${t(c)}</div>`).join('')}
+                    ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}"><div class="draft-choice-name">${t(c)}</div>${characterAbility(c) ? `<div class="draft-choice-ability">${characterAbility(c)}</div>` : ''}</div>`).join('')}
                 </div>
             </div>`;
         } else if (state.phase === 'DraftPick') {

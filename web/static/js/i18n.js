@@ -12,6 +12,16 @@
             'Architect': 'Architect',
             'Warlord': 'Warlord',
 
+            // Character abilities
+            'ability_Assassin': 'Choose a character to murder — they skip their turn',
+            'ability_Thief': 'Choose a character to rob. When their turn comes, you take all their gold',
+            'ability_Magician': 'Swap your hand with another player, or discard any number of cards and draw the same amount',
+            'ability_King': 'Receive gold for each noble district. The crown passes to you immediately',
+            'ability_Bishop': 'Receive gold for each religious district. The Warlord cannot destroy your districts',
+            'ability_Merchant': 'Receive gold for each trade district. +1 extra gold at the start of your turn',
+            'ability_Architect': 'Draw 2 extra district cards. You may build up to 3 districts per turn',
+            'ability_Warlord': 'Receive gold for each military district. You may pay to destroy a district',
+
             // Districts
             'Manor': 'Manor',
             'Castle': 'Castle',
@@ -209,6 +219,16 @@
             'Merchant': 'Купец',
             'Architect': 'Зодчий',
             'Warlord': 'Кондотьер',
+
+            // Character abilities
+            'ability_Assassin': 'Выберите персонажа, которого хотите убить. Этот персонаж пропустит свой ход',
+            'ability_Thief': 'Выберите персонажа, которого хотите ограбить. Когда придёт его ход, вы заберёте всё его золото',
+            'ability_Magician': 'Поменяйтесь картами с другим игроком или сбросьте любое количество карт и возьмите столько же новых',
+            'ability_King': 'Получите золото за каждый дворянский квартал. Корона сразу переходит к вам',
+            'ability_Bishop': 'Получите золото за каждый церковный квартал. Кондотьер не может разрушить ваш квартал',
+            'ability_Merchant': 'Получите золото за каждый торговый квартал. +1 монета в начале хода',
+            'ability_Architect': 'Получите 2 дополнительные карты кварталов. Можно построить до 3 кварталов за ход',
+            'ability_Warlord': 'Получите золото за каждый воинский квартал. Можно заплатить за разрушение квартала',
 
             // Districts
             'Manor': 'Поместье',
@@ -436,6 +456,14 @@
 
     window.districtEffect = function(name) {
         var key = 'effect_' + name;
+        var dict = translations[currentLang] || translations['en'];
+        if (dict[key] !== undefined) return dict[key];
+        if (translations['en'][key] !== undefined) return translations['en'][key];
+        return '';
+    };
+
+    window.characterAbility = function(name) {
+        var key = 'ability_' + name;
         var dict = translations[currentLang] || translations['en'];
         if (dict[key] !== undefined) return dict[key];
         if (translations['en'][key] !== undefined) return translations['en'][key];

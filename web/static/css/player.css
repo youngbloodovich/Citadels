@@ -74,6 +74,14 @@ body { font-size: 16px; }
     transition: all 0.2s;
 }
 .draft-choice:hover { border-color: #e0a030; background: #1e2d4e; }
+.draft-choice-name { font-weight: bold; }
+.draft-choice-ability { font-size: 12px; color: #aaa; margin-top: 4px; font-style: italic; }
+
+/* Character list */
+.character-list { display: flex; flex-direction: column; gap: 6px; }
+.character-item { padding: 8px 12px; background: #16213e; border-radius: 8px; border-left: 3px solid #9b59b6; }
+.character-name { color: #9b59b6; font-size: 18px; font-weight: bold; }
+.character-ability { display: block; font-size: 12px; color: #aaa; margin-top: 2px; font-style: italic; }
 .draw-choices {
     display: flex;
     flex-direction: column;
