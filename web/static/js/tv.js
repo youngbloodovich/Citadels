@@ -159,6 +159,10 @@
         startTimerCountdown();
     }
 
+    function cityScore(p) {
+        return (p.city || []).reduce((sum, d) => sum + d.cost, 0);
+    }
+
     function renderPlayerCard(p) {
         const isActive = state.current_turn === p.name;
         return `
@@ -167,6 +171,7 @@
                 <div class="stats">
                     <span class="gold">${p.gold} ${t('gold')}</span>
                     <span>${p.hand_size} ${t('cards')}</span>
+                    <span>${cityScore(p)} ${t('pts')}</span>
                 </div>
                 ${p.revealed_roles && p.revealed_roles.length > 0 ?
                     `<div style="color:#9b59b6;margin:4px 0;">${p.revealed_roles.map(r => t(r)).join(', ')}</div>` : ''}

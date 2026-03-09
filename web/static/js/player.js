@@ -683,14 +683,15 @@
 
         let cardsHTML = others.map(p => {
             const isActive = state.current_turn === p.name;
+            const score = (p.city || []).reduce((sum, d) => sum + d.cost, 0);
             const roles = (p.revealed_roles && p.revealed_roles.length > 0)
                 ? `<div class="mini-roles">${p.revealed_roles.map(r => t(r)).join(', ')}</div>`
                 : '';
             const city = (p.city || []).map(d =>
-                `<span class="district-chip ${colorClass(d.color)}">${t(d.name)}${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`
+                `<span class="district-chip ${colorClass(d.color)}">${t(d.name)} (${d.cost})${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`
             ).join(' ');
             return `<div class="mini-card ${isActive ? 'active' : ''}">
-                <div class="mini-name">${p.name}${p.has_crown ? ' 👑' : ''} <span class="mini-stats">${p.gold}g · ${p.hand_size} ${t('cards')}</span></div>
+                <div class="mini-name">${p.name}${p.has_crown ? ' 👑' : ''} <span class="mini-stats">${p.gold}g · ${p.hand_size} ${t('cards')} · ${score} ${t('pts')}</span></div>
                 ${roles}
                 ${city ? `<div class="mini-city">${city}</div>` : ''}
             </div>`;
