@@ -63,6 +63,9 @@
                 `).join('')}
             </div>
             <p style="text-align:center;color:#888;">${(data.players||[]).length} ${t('players_joined')}</p>
+            <div style="text-align:center;margin-top:16px;">
+                <button onclick="location.href='/'" style="background:#555;color:#ccc;">${t('leave_lobby')}</button>
+            </div>
         `;
         bindLangSwitcher(rerender);
         const copyBtn = document.getElementById('copy-link-btn');
