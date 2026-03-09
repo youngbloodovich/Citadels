@@ -211,7 +211,7 @@
                         </tr>
                         <tr>
                             <td colspan="6" class="score-city-row">
-                                ${city.map(d => `<span class="district-chip ${colorClass(d.color)}" ${districtEffect(d.name) ? `title="${districtEffect(d.name)}"` : ''}>${t(d.name)} (${d.cost})</span>`).join('')}
+                                ${city.map(d => `<span class="district-chip ${colorClass(d.color)}">${t(d.name)} (${d.cost})${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`).join('')}
                             </td>
                         </tr>`;
                     }).join('')}
