@@ -139,8 +139,6 @@
             </div>
         `;
 
-        content += renderTable();
-
         // Characters
         if (state.characters && state.characters.length > 0) {
             content += `<div class="section">
@@ -341,6 +339,8 @@
                 </div>
             </div>`;
         }
+
+        content += renderTable();
 
         app.innerHTML = content;
         bindActions();
