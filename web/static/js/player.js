@@ -323,7 +323,7 @@
         // Graveyard prompt (shown regardless of whose turn it is)
         if (state.graveyard_choice) {
             content += `<div class="section graveyard-prompt" style="background:#2d1b3d;border:2px solid #9b59b6;border-radius:8px;padding:12px;margin:8px 0;">
-                <div style="margin-bottom:8px;">${t('graveyard_prompt', { district: t(state.graveyard_choice.district_name) })} ${timerBadgeHTML()}</div>
+                <div style="margin-bottom:8px;">${t('graveyard_prompt', { district: t(state.graveyard_choice.district_name), cost: state.graveyard_choice.district_cost })} ${timerBadgeHTML()}</div>
                 <div style="display:flex;gap:8px;">
                     <button id="btn-graveyard-accept" style="flex:1;background:#27ae60;">${t('graveyard_accept')}</button>
                     <button id="btn-graveyard-decline" style="flex:1;background:#c0392b;">${t('graveyard_decline')}</button>

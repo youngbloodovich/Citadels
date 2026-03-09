@@ -118,7 +118,7 @@
             'lab_select_card': 'Select a card to discard for 1 gold',
             'lab_cancel': 'Cancel',
             'smithy_btn': 'Smithy (2g → 3 cards)',
-            'graveyard_prompt': 'Graveyard: Pay 1 gold to take {district} into your hand?',
+            'graveyard_prompt': 'Graveyard: Pay 1 gold to take {district} ({cost}g) into your hand?',
             'graveyard_accept': 'Accept',
             'graveyard_decline': 'Decline',
 
@@ -312,7 +312,7 @@
             'lab_select_card': 'Выберите карту для сброса за 1 золото',
             'lab_cancel': 'Отмена',
             'smithy_btn': 'Кузня (2з → 3 карты)',
-            'graveyard_prompt': 'Кладбище: Заплатить 1 золото, чтобы взять {district} в руку?',
+            'graveyard_prompt': 'Кладбище: Заплатить 1 золото, чтобы взять {district} ({cost}з) в руку?',
             'graveyard_accept': 'Принять',
             'graveyard_decline': 'Отклонить',
 
