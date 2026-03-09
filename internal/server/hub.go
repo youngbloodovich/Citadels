@@ -381,6 +381,13 @@ func (h *Hub) handleTimerExpired() {
 			}
 			h.broadcastEvents(events)
 		}
+		// Collect gold for matching districts (free action, always beneficial)
+		if !p.CollectedGold {
+			collectEvents, collectErr := h.game.Apply(pid, engine.Action{Type: engine.ActionCollectGold})
+			if collectErr == nil {
+				h.broadcastEvents(collectEvents)
+			}
+		}
 		// End turn
 		events, err = h.game.Apply(pid, engine.Action{Type: engine.ActionEndTurn})
 
