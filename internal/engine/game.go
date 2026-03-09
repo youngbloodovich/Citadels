@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"sort"
 )
 
 var (
@@ -727,9 +728,12 @@ func (g *Game) ViewFor(playerID string) PlayerViewData {
 		}
 	}
 
-	// Draft choices
+	// Draft choices (sorted by role number = call order)
 	if g.Phase == PhaseDraftPick && g.Draft != nil && g.Draft.CurrentPickerID() == playerID {
-		for _, r := range g.Draft.Available {
+		sorted := make([]CharacterRole, len(g.Draft.Available))
+		copy(sorted, g.Draft.Available)
+		sort.Slice(sorted, func(i, j int) bool { return sorted[i] < sorted[j] })
+		for _, r := range sorted {
 			pv.DraftChoices = append(pv.DraftChoices, r.String())
 		}
 	}
