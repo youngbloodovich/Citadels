@@ -47,7 +47,7 @@
     function joinByCode() {
         var code = document.getElementById('input-code').value.trim();
         if (code) {
-            window.location.href = '/lobby.html?game=' + encodeURIComponent(code);
+            window.location.href = '/tv.html?game=' + encodeURIComponent(code);
         }
     }
 
@@ -80,7 +80,7 @@
                                 '<div class="game-id">' + g.id + '</div>' +
                                 '<div class="game-players">' + g.players + '/' + g.max_players + (names ? ' — ' + names : '') + '</div>' +
                             '</div>' +
-                            '<button class="btn-join-game" onclick="window.location.href=\'/lobby.html?game=' + g.id + '\'">' + t('home_join_game') + '</button>' +
+                            '<button class="btn-join-game" onclick="window.location.href=\'/tv.html?game=' + g.id + '\'">' + t('home_join_game') + '</button>' +
                         '</div>';
                 });
                 container.innerHTML = html;

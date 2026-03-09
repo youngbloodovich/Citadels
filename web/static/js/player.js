@@ -127,6 +127,7 @@
         const me = (state.players || []).find(p => p.id === playerID);
         const gold = me ? me.gold : 0;
         const handSize = state.hand ? state.hand.length : 0;
+        const cityScore = me ? (me.city || []).reduce((sum, d) => sum + d.cost, 0) : 0;
 
         let content = `
             <div class="player-header">
@@ -135,6 +136,7 @@
                 <div class="info">
                     <span class="gold">${gold} ${t('gold')}</span>
                     <span>${handSize} ${t('cards')}</span>
+                    <span>${cityScore} ${t('pts')}</span>
                 </div>
             </div>
         `;
