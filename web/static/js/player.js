@@ -687,7 +687,7 @@
                 ? `<div class="mini-roles">${p.revealed_roles.map(r => t(r)).join(', ')}</div>`
                 : '';
             const city = (p.city || []).map(d =>
-                `<span class="district-chip ${colorClass(d.color)}">${t(d.name)}</span>`
+                `<span class="district-chip ${colorClass(d.color)}">${t(d.name)}${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`
             ).join(' ');
             return `<div class="mini-card ${isActive ? 'active' : ''}">
                 <div class="mini-name">${p.name}${p.has_crown ? ' 👑' : ''} <span class="mini-stats">${p.gold}g · ${p.hand_size} ${t('cards')}</span></div>

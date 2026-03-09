@@ -64,6 +64,14 @@ input:focus { outline: none; border-color: #e0a030; }
 .district-chip.color-trade    { border-left-color: #45a049; }
 .district-chip.color-military { border-left-color: #d9534f; }
 .district-chip.color-special  { border-left-color: #9b59b6; }
+.district-effect {
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+    color: #aaa;
+    font-style: italic;
+    margin-top: 1px;
+}
 
 .city-districts {
     display: flex;
