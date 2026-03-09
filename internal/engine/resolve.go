@@ -19,13 +19,20 @@ func (g *Game) CallCharacter(role CharacterRole) []Event {
 	g.CurrentCallRole = role
 	var events []Event
 
-	events = append(events, Event{
-		Type: EventCharacterCall,
-		Data: map[string]interface{}{"role": role.String(), "number": int(role)},
-	})
-
 	// Find who has this character
 	ownerID := g.FindCharacterOwner(role)
+
+	callData := map[string]interface{}{"role": role.String(), "number": int(role)}
+	if ownerID != "" {
+		if owner := g.GetPlayer(ownerID); owner != nil {
+			callData["player"] = owner.Name
+		}
+	}
+	events = append(events, Event{
+		Type: EventCharacterCall,
+		Data: callData,
+	})
+
 	if ownerID == "" {
 		// Nobody picked this character
 		return events

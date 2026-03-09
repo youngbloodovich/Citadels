@@ -608,7 +608,7 @@
             case 'draft_done':
                 return { text: t('ev_draft_done'), css: 'ev-round' };
             case 'character_call':
-                return { text: t('ev_character_call', { number: d.number, role: t(d.role) }), css: 'ev-call' };
+                return { text: t('ev_character_call', { number: d.number, role: t(d.role), player: d.player ? ' (' + d.player + ')' : '' }), css: 'ev-call' };
             case 'murdered':
                 return { text: t('ev_murdered', { role: t(d.role), player: pName(ev.player) }), css: 'ev-danger' };
             case 'robbed':
