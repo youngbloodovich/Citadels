@@ -69,7 +69,11 @@
 
             // UI — lobby
             'lobby': 'Lobby',
-            'scan_to_join': 'Scan to join!',
+            'scan_to_join': 'Scan QR code to enter the lobby!',
+            'or_copy_link': 'Or copy the link and send it to friends',
+            'follow_link': 'Follow the link to join the lobby:',
+            'copy_link': 'Copy Link',
+            'link_copied': 'Copied!',
             'game_label': 'Game',
             'players_joined': 'player(s) joined',
             'waiting_for_players': 'Waiting for players...',
@@ -259,7 +263,11 @@
 
             // UI — lobby
             'lobby': 'Лобби',
-            'scan_to_join': 'Сканируйте чтобы войти!',
+            'scan_to_join': 'Отсканируйте QR-код чтобы войти в лобби!',
+            'or_copy_link': 'Или скопируйте ссылку и отправьте друзьям',
+            'follow_link': 'Перейдите по ссылке для входа в лобби:',
+            'copy_link': 'Скопировать ссылку',
+            'link_copied': 'Скопировано!',
             'game_label': 'Игра',
             'players_joined': 'игрок(ов) в игре',
             'waiting_for_players': 'Ожидание игроков...',

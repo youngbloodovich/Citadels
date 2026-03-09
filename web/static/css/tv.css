@@ -18,14 +18,67 @@ body { font-size: 20px; }
     font-weight: bold;
     font-size: 18px;
 }
-.qr-section {
-    text-align: center;
+/* Lobby join section */
+.lobby-join-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
     padding: 40px;
+    background: #16213e;
+    border-radius: 16px;
+    margin-bottom: 24px;
 }
-.qr-section img {
+.lobby-join-qr {
+    text-align: center;
+    flex-shrink: 0;
+}
+.lobby-join-qr h2 {
+    margin-bottom: 12px;
+    font-size: 24px;
+}
+.lobby-join-qr img {
     border: 8px solid #e0a030;
     border-radius: 16px;
-    margin: 20px;
+}
+.lobby-join-info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.lobby-join-block {}
+.lobby-join-label {
+    font-size: 18px;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+.lobby-join-link {
+    display: block;
+    font-size: 16px;
+    color: #4a90d9;
+    text-decoration: none;
+    word-break: break-all;
+    padding: 10px 16px;
+    background: rgba(74, 144, 217, 0.1);
+    border: 1px solid rgba(74, 144, 217, 0.3);
+    border-radius: 8px;
+}
+.lobby-join-link:hover { background: rgba(74, 144, 217, 0.2); }
+.lobby-copy-btn {
+    padding: 10px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #333;
+    color: #ccc;
+    border: 1px solid #555;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+.lobby-copy-btn:hover { background: #444; }
+.lobby-copy-btn.copied {
+    background: #e0a030;
+    border-color: #e0a030;
+    color: #1a1a2e;
 }
 .players-grid {
     display: grid;

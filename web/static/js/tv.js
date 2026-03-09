@@ -32,19 +32,28 @@
     function renderLobby(data) {
         if (data.started && state) { renderGame(); return; }
         const app = document.getElementById('tv-app');
+        const joinUrl = 'http://' + location.host + '/lobby.html?game=' + gameID;
         app.innerHTML = `
             <div class="tv-header">
                 <h1>${t('citadels')}</h1>
                 <span class="phase-badge">${t('lobby')}</span>
                 ${langSwitcherHTML()}
             </div>
-            <div class="qr-section">
-                <h2>${t('scan_to_join')}</h2>
-                <img src="/api/qr?game=${gameID}" alt="QR Code" width="256" height="256">
-                <p style="font-size:14px;color:#aaa;margin-top:8px;word-break:break-all;text-align:center;">
-                    <a href="http://${location.host}/lobby.html?game=${gameID}" target="_blank" style="color:#4a90d9;text-decoration:none;">http://${location.host}/lobby.html?game=${gameID}</a>
-                </p>
-                <button id="copy-link-btn" style="margin-top:6px;padding:6px 18px;font-size:13px;cursor:pointer;background:#333;color:#ccc;border:1px solid #555;border-radius:6px;transition:all 0.3s;">Copy</button>
+            <div class="lobby-join-section">
+                <div class="lobby-join-qr">
+                    <h2>${t('scan_to_join')}</h2>
+                    <img src="/api/qr?game=${gameID}" alt="QR Code" width="256" height="256">
+                </div>
+                <div class="lobby-join-info">
+                    <div class="lobby-join-block">
+                        <p class="lobby-join-label">${t('follow_link')}</p>
+                        <a href="${joinUrl}" target="_blank" class="lobby-join-link">${joinUrl}</a>
+                    </div>
+                    <div class="lobby-join-block">
+                        <p class="lobby-join-label">${t('or_copy_link')}</p>
+                        <button id="copy-link-btn" class="lobby-copy-btn">${t('copy_link')}</button>
+                    </div>
+                </div>
             </div>
             <div class="lobby-players">
                 ${(data.players || []).map(p => `
@@ -57,7 +66,6 @@
         `;
         bindLangSwitcher(rerender);
         const copyBtn = document.getElementById('copy-link-btn');
-        const joinUrl = 'http://' + location.host + '/lobby.html?game=' + gameID;
         copyBtn.onclick = () => copyLink(joinUrl);
         if (!lobbyCopied) { lobbyCopied = true; setTimeout(() => copyLink(joinUrl), 400); }
     }
@@ -76,15 +84,11 @@
             document.body.removeChild(ta);
         }
         const done = () => {
-            btn.textContent = 'Copied!';
-            btn.style.background = '#e0a030';
-            btn.style.borderColor = '#e0a030';
-            btn.style.color = '#fff';
+            btn.textContent = t('link_copied');
+            btn.classList.add('copied');
             setTimeout(() => {
-                btn.textContent = 'Copy';
-                btn.style.background = '#333';
-                btn.style.borderColor = '#555';
-                btn.style.color = '#ccc';
+                btn.textContent = t('copy_link');
+                btn.classList.remove('copied');
             }, 2000);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) {
