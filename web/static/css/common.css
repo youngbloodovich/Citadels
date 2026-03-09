@@ -117,3 +117,13 @@ input:focus { outline: none; border-color: #e0a030; }
     0%, 100% { opacity: 1; }
     50% { opacity: 0.6; }
 }
+
+/* Event log colors — unified for TV and player */
+.ev-round    { color: #e0a030; }
+.ev-call     { color: #c39bd3; }
+.ev-danger   { color: #f1948a; }
+.ev-action   { color: #85c1e9; }
+.ev-build    { color: #82e0aa; }
+.ev-ability  { color: #f0b27a; }
+.ev-draft    { color: #aab7b8; }
+.ev-minor    { color: #888; }

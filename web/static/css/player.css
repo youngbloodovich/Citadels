@@ -156,8 +156,3 @@ body { font-size: 16px; }
 .table-log-title { font-size: 13px; font-weight: bold; color: #e0a030; margin-top: 10px; padding-top: 8px; border-top: 1px solid #333; margin-bottom: 6px; }
 .table-log { max-height: 120px; overflow-y: auto; }
 .table-log .event-entry { font-size: 12px; color: #aaa; padding: 1px 0; }
-.table-log .ev-danger { color: #d9534f; }
-.table-log .ev-build { color: #45a049; }
-.table-log .ev-ability { color: #9b59b6; }
-.table-log .ev-round { color: #e0a030; }
-.table-log .ev-call { color: #4a90d9; }
