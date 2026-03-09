@@ -515,7 +515,7 @@ func (g *Game) applyLabDiscard(playerID string, action Action) ([]Event, error) 
 		return nil, fmt.Errorf("card %s not in hand", action.DistrictName)
 	}
 	g.Deck.Return([]District{card})
-	p.Gold++
+	p.Gold += 2
 	p.UsedLab = true
 	return []Event{
 		{Type: EventAbilityUsed, Player: playerID, Data: map[string]interface{}{
