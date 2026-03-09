@@ -297,7 +297,7 @@
                 </div>`;
             }
         } else if (state.phase === 'PlayerTurn' && !state.is_my_turn) {
-            content += `<div class="waiting">${t('waiting')} ${state.current_role ? t(state.current_role) : ''} ${t('waiting_playing')} ${timerBadgeHTML()}</div>`;
+            content += `<div class="waiting">${t('waiting')} ${state.current_turn || ''} (${state.current_role ? t(state.current_role) : ''}) ${t('waiting_playing')} ${timerBadgeHTML()}</div>`;
         }
 
         // Hand (non-turn view)
