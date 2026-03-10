@@ -8,5 +8,5 @@ RUN CGO_ENABLED=0 go build -o /citadels .
 FROM alpine:3.21
 RUN apk add --no-cache ca-certificates
 COPY --from=build /citadels /citadels
-EXPOSE 8080
+EXPOSE 80
 ENTRYPOINT ["/citadels"]

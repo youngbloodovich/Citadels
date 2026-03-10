@@ -12,7 +12,7 @@ import (
 var static embed.FS
 
 func main() {
-	port := flag.Int("port", 8080, "server port")
+	port := flag.Int("port", 80, "server port")
 	flag.Parse()
 
 	srv := server.New(*port, static)
