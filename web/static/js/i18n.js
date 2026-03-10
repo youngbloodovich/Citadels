@@ -62,7 +62,7 @@
             'Special': 'Special',
 
             // UI — home
-            'home_title': 'Citadels',
+            'home_title': 'Citadels Online',
             'home_create': 'Create Game',
             'home_join': 'Join by Code',
             'home_join_placeholder': 'Game code',
@@ -270,7 +270,7 @@
             'Special': 'Особый',
 
             // UI — home
-            'home_title': 'Цитадели',
+            'home_title': 'Цитадели Онлайн',
             'home_create': 'Создать игру',
             'home_join': 'Присоединиться по коду',
             'home_join_placeholder': 'Код игры',
