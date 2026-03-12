@@ -51,10 +51,8 @@
                         <div class="lobby-join-info">
                             <p class="lobby-step"><span class="lobby-step-num">1</span>${t('scan_to_join')}</p>
                             <p class="lobby-step"><span class="lobby-step-num">2</span>${t('or_copy_link')}</p>
-                            <div class="lobby-link-row">
-                                <span class="lobby-link-url">${joinUrl}</span>
-                                <button id="copy-link-btn" class="lobby-copy-btn">${t('copy_link')}</button>
-                            </div>
+                            <div class="lobby-link-url">${joinUrl}</div>
+                            <button id="copy-link-btn" class="lobby-copy-btn">${t('copy_link')}</button>
                         </div>
                     </div>
                     <div class="lobby-divider"></div>
@@ -71,14 +69,22 @@
         `;
         bindLangSwitcher(rerender);
         const copyBtn = document.getElementById('copy-link-btn');
-        copyBtn.onclick = () => copyLink(joinUrl);
-        if (!lobbyCopied) { lobbyCopied = true; setTimeout(() => copyLink(joinUrl), 400); }
+        if (copyBtn) copyBtn.onclick = () => copyLink(joinUrl);
+        if (!lobbyCopied) {
+            lobbyCopied = true;
+            setTimeout(() => {
+                copyToClipboard(joinUrl);
+                const b = document.getElementById('copy-link-btn');
+                if (b) {
+                    b.textContent = t('link_copied');
+                    b.classList.add('copied');
+                    setTimeout(() => { b.textContent = t('copy_link'); b.classList.remove('copied'); }, 2000);
+                }
+            }, 500);
+        }
     }
 
-    function copyLink(url) {
-        const btn = document.getElementById('copy-link-btn');
-        if (!btn) return;
-        // Fallback for non-secure contexts (HTTP over LAN)
+    function copyToClipboard(url) {
         function fallbackCopy() {
             const ta = document.createElement('textarea');
             ta.value = url;
@@ -88,19 +94,23 @@
             document.execCommand('copy');
             document.body.removeChild(ta);
         }
-        const done = () => {
-            btn.textContent = t('link_copied');
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.textContent = t('copy_link');
-                btn.classList.remove('copied');
-            }, 2000);
-        };
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).then(done).catch(() => { fallbackCopy(); done(); });
+            navigator.clipboard.writeText(url).catch(() => fallbackCopy());
         } else {
-            fallbackCopy(); done();
+            fallbackCopy();
         }
+    }
+
+    function copyLink(url) {
+        const btn = document.getElementById('copy-link-btn');
+        if (!btn) return;
+        copyToClipboard(url);
+        btn.textContent = t('link_copied');
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = t('copy_link');
+            btn.classList.remove('copied');
+        }, 2000);
     }
 
     function renderGame() {
@@ -177,7 +187,7 @@
                     <span>${cityScore(p)} ${t('pts')}</span>
                 </div>
                 ${p.revealed_roles && p.revealed_roles.length > 0 ?
-                    `<div style="color:#9b59b6;margin:4px 0;">${p.revealed_roles.map(r => t(r)).join(', ')}</div>` : ''}
+                    `<div style="margin:4px 0;">${p.revealed_roles.map(r => `<span style="color:${characterColor(r)}">${t(r)}</span>`).join(', ')}</div>` : ''}
                 <div class="city-districts">
                     ${(p.city || []).map(d => `<span class="district-chip ${colorClass(d.color)}">${t(d.name)} (${d.cost})${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`).join('')}
                 </div>

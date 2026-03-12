@@ -142,8 +142,8 @@ input:focus { outline: none; border-color: #e0a030; }
     font-weight: bold;
 }
 .char-icon.active {
-    background: rgba(255, 255, 255, 0.9);
-    color: #1a1a2e;
+    background: #9b59b6;
+    color: #fff;
 }
 .char-icon.done {
     opacity: 0.35;
@@ -161,9 +161,9 @@ input:focus { outline: none; border-color: #e0a030; }
 .char-icon.c-trade    { background: rgba(69, 160, 73, 0.15); color: #45a049; }
 .char-icon.c-military { background: rgba(217, 83, 79, 0.15); color: #d9534f; }
 .char-icon.active.c-noble    { background: #c9a227; color: #1a1a2e; }
-.char-icon.active.c-religious { background: #4a90d9; color: #1a1a2e; }
-.char-icon.active.c-trade    { background: #45a049; color: #1a1a2e; }
-.char-icon.active.c-military { background: #d9534f; color: #1a1a2e; }
+.char-icon.active.c-religious { background: #4a90d9; color: #fff; }
+.char-icon.active.c-trade    { background: #45a049; color: #fff; }
+.char-icon.active.c-military { background: #d9534f; color: #fff; }
 
 /* Event log colors — unified for TV and player */
 .ev-round    { color: #e0a030; }

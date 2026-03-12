@@ -79,8 +79,8 @@ body { font-size: 16px; }
 
 /* Character list */
 .character-list { display: flex; flex-direction: column; gap: 6px; }
-.character-item { padding: 8px 12px; background: #16213e; border-radius: 8px; border-left: 3px solid #9b59b6; }
-.character-name { color: #9b59b6; font-size: 18px; font-weight: bold; }
+.character-item { padding: 8px 12px; background: #16213e; border-radius: 8px; border-left: 3px solid #888; }
+.character-name { color: #888; font-size: 18px; font-weight: bold; }
 .character-ability { display: block; font-size: 12px; color: #aaa; margin-top: 2px; font-style: italic; }
 .draw-choices {
     display: flex;
@@ -152,7 +152,7 @@ body { font-size: 16px; }
 .mini-card .mini-name { font-weight: bold; }
 .mini-card .mini-stats { color: #aaa; font-size: 12px; }
 .mini-card .mini-city { font-size: 11px; color: #888; margin-top: 2px; }
-.mini-card .mini-roles { color: #9b59b6; font-size: 12px; }
+.mini-card .mini-roles { font-size: 12px; }
 .table-log-title { font-size: 13px; font-weight: bold; color: #e0a030; margin-top: 10px; padding-top: 8px; border-top: 1px solid #333; margin-bottom: 6px; }
 .table-log { max-height: 120px; overflow-y: auto; }
 .table-log .event-entry { font-size: 12px; padding: 1px 0; }

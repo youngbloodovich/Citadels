@@ -683,7 +683,7 @@
             const isActive = state.current_turn === p.name;
             const score = (p.city || []).reduce((sum, d) => sum + d.cost, 0);
             const roles = (p.revealed_roles && p.revealed_roles.length > 0)
-                ? `<div class="mini-roles">${p.revealed_roles.map(r => t(r)).join(', ')}</div>`
+                ? `<div class="mini-roles">${p.revealed_roles.map(r => `<span style="color:${characterColor(r)}">${t(r)}</span>`).join(', ')}</div>`
                 : '';
             const city = (p.city || []).map(d =>
                 `<span class="district-chip ${colorClass(d.color)}">${t(d.name)} (${d.cost})${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`
