@@ -34,39 +34,38 @@
         if (data.started && state) { renderGame(); return; }
         const app = document.getElementById('tv-app');
         const joinUrl = 'http://' + location.host + '/lobby.html?game=' + gameID;
-        const playerCount = (data.players || []).length;
+        const players = data.players || [];
+        const playersHTML = players.length > 0
+            ? players.map(p => `<div class="lobby-player ${p.ready ? 'ready' : ''}">${p.name} ${p.ready ? '✓' : '...'}</div>`).join('')
+            : `<div class="lobby-empty">${t('waiting_for_players')}</div>`;
         app.innerHTML = `
             <div class="lobby-screen">
-                <div class="lobby-top">
+                <div class="lobby-card">
                     <h1 class="lobby-title">${t('home_title')}</h1>
                     <p class="lobby-subtitle">${t('lobby_subtitle')}</p>
-                    ${langSwitcherHTML()}
-                </div>
-                <div class="lobby-main">
-                    <div class="lobby-qr-block">
-                        <img src="/api/qr?game=${gameID}" alt="QR Code" width="200" height="200">
-                        <p class="lobby-qr-hint">${t('scan_to_join')}</p>
-                    </div>
-                    <div class="lobby-link-block">
-                        <p class="lobby-link-label">${t('or_copy_link')}</p>
-                        <div class="lobby-link-row">
-                            <span class="lobby-link-url">${joinUrl}</span>
-                            <button id="copy-link-btn" class="lobby-copy-btn">${t('copy_link')}</button>
+                    <div class="lobby-divider"></div>
+                    <div class="lobby-join-area">
+                        <div class="lobby-qr">
+                            <img src="/api/qr?game=${gameID}" alt="QR" width="180" height="180">
+                        </div>
+                        <div class="lobby-join-info">
+                            <p class="lobby-step"><span class="lobby-step-num">1</span>${t('scan_to_join')}</p>
+                            <p class="lobby-step"><span class="lobby-step-num">2</span>${t('or_copy_link')}</p>
+                            <div class="lobby-link-row">
+                                <span class="lobby-link-url">${joinUrl}</span>
+                                <button id="copy-link-btn" class="lobby-copy-btn">${t('copy_link')}</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="lobby-players-section">
-                    <p class="lobby-players-count">${playerCount} ${t('players_joined')}</p>
-                    <div class="lobby-players">
-                        ${(data.players || []).map(p => `
-                            <div class="lobby-player ${p.ready ? 'ready' : ''}">
-                                ${p.name} ${p.ready ? '✓' : '...'}
-                            </div>
-                        `).join('')}
+                    <div class="lobby-divider"></div>
+                    <div class="lobby-players-area">
+                        <p class="lobby-players-label">${players.length} ${t('players_joined')}</p>
+                        <div class="lobby-players">${playersHTML}</div>
                     </div>
                 </div>
-                <div class="lobby-bottom">
+                <div class="lobby-footer">
                     <button onclick="location.href='/'" class="lobby-back-btn">${t('leave_lobby')}</button>
+                    ${langSwitcherHTML()}
                 </div>
             </div>
         `;

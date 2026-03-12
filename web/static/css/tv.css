@@ -25,54 +25,69 @@ body { font-size: 20px; overflow: hidden; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 24px;
-    gap: 24px;
+    height: 100%;
+    gap: 16px;
 }
-.lobby-top {
+.lobby-card {
+    background: #16213e;
+    border-radius: 20px;
+    padding: 36px 40px;
+    width: 100%;
+    max-width: 600px;
     text-align: center;
 }
 .lobby-title {
-    font-size: 2.4em;
+    font-size: 2em;
     letter-spacing: 2px;
     margin-bottom: 4px;
 }
 .lobby-subtitle {
-    color: #aaa;
-    font-size: 18px;
-    margin-bottom: 4px;
+    color: #999;
+    font-size: 16px;
 }
-.lobby-main {
+.lobby-divider {
+    height: 1px;
+    background: #333;
+    margin: 20px 0;
+}
+.lobby-join-area {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px;
-    background: #16213e;
-    border-radius: 16px;
-    padding: 32px;
-    width: 100%;
-    max-width: 480px;
+    gap: 32px;
 }
-.lobby-qr-block {
-    text-align: center;
+.lobby-qr {
+    flex-shrink: 0;
 }
-.lobby-qr-block img {
-    border: 6px solid #e0a030;
+.lobby-qr img {
+    border: 5px solid #e0a030;
     border-radius: 12px;
+    display: block;
 }
-.lobby-qr-hint {
-    color: #aaa;
+.lobby-join-info {
+    flex: 1;
+    text-align: left;
+    min-width: 0;
+}
+.lobby-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ccc;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+.lobby-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e0a030;
+    color: #1a1a2e;
+    font-weight: bold;
     font-size: 14px;
-    margin-top: 8px;
-}
-.lobby-link-block {
-    width: 100%;
-    text-align: center;
-}
-.lobby-link-label {
-    color: #888;
-    font-size: 14px;
-    margin-bottom: 8px;
+    flex-shrink: 0;
 }
 .lobby-link-row {
     display: flex;
@@ -85,46 +100,69 @@ body { font-size: 20px; overflow: hidden; }
     color: #4a90d9;
     word-break: break-all;
     padding: 8px 12px;
-    background: rgba(74, 144, 217, 0.1);
-    border: 1px solid rgba(74, 144, 217, 0.3);
+    background: rgba(74, 144, 217, 0.08);
+    border: 1px solid rgba(74, 144, 217, 0.25);
     border-radius: 8px;
     text-align: left;
+    min-width: 0;
 }
 .lobby-copy-btn {
     padding: 8px 16px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
-    background: #333;
-    color: #ccc;
-    border: 1px solid #555;
+    background: #e0a030;
+    color: #1a1a2e;
+    font-weight: bold;
+    border: none;
     border-radius: 8px;
     flex-shrink: 0;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
-.lobby-copy-btn:hover { background: #444; }
+.lobby-copy-btn:hover { background: #f0b040; }
 .lobby-copy-btn.copied {
-    background: #e0a030;
-    border-color: #e0a030;
-    color: #1a1a2e;
+    background: #45a049;
+    color: #fff;
 }
-.lobby-players-section {
+.lobby-players-area {
     text-align: center;
-    width: 100%;
-    max-width: 480px;
 }
-.lobby-players-count {
+.lobby-players-label {
     color: #888;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+.lobby-empty {
+    color: #555;
     font-size: 15px;
-    margin-bottom: 10px;
+    padding: 8px;
+}
+.lobby-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 .lobby-back-btn {
-    background: #333;
-    color: #ccc;
-    border: 1px solid #555;
-    padding: 10px 28px;
-    font-size: 15px;
+    background: none;
+    color: #888;
+    border: 1px solid #444;
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 8px;
 }
-.lobby-back-btn:hover { background: #444; }
+.lobby-back-btn:hover { color: #ccc; border-color: #666; background: none; }
+@media (max-width: 600px) {
+    .lobby-card { padding: 24px 20px; }
+    .lobby-join-area {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .lobby-join-info { text-align: center; }
+    .lobby-qr img { width: 150px; height: 150px; }
+    .lobby-link-row { flex-direction: column; }
+    .lobby-link-url { width: 100%; }
+    .lobby-copy-btn { width: 100%; }
+    .lobby-title { font-size: 1.6em; }
+}
 .players-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -180,18 +218,17 @@ body { font-size: 20px; overflow: hidden; }
 .lobby-players {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 10px;
     justify-content: center;
-    margin: 24px 0;
 }
 .lobby-player {
-    padding: 16px 24px;
-    background: #16213e;
-    border-radius: 12px;
-    font-size: 22px;
+    padding: 10px 20px;
+    background: #1a1a2e;
+    border-radius: 10px;
+    font-size: 17px;
     border: 2px solid #333;
 }
-.lobby-player.ready { border-color: #45a049; }
+.lobby-player.ready { border-color: #45a049; color: #45a049; }
 
 /* Layout: players + event log side by side */
 .tv-body {
