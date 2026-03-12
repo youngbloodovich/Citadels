@@ -485,6 +485,7 @@
 
     var charColorMap = { King: '#c9a227', Bishop: '#4a90d9', Merchant: '#45a049', Warlord: '#d9534f' };
     window.characterColor = function(name) { return charColorMap[name] || '#888'; };
+    window.characterAccentColor = function(name) { return charColorMap[name] || '#9b59b6'; };
 
     window.characterBarHTML = function(state) {
         var phase = state.phase || '';

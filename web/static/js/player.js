@@ -181,27 +181,27 @@
 
         // Player turn
         if (state.is_my_turn && state.phase === 'PlayerTurn') {
-            content += `<div class="turn-indicator" style="--role-color:${characterColor(state.current_role)}">${t('your_turn')} (${t(state.current_role)}) ${timerBadgeHTML()}</div>`;
+            content += `<div class="turn-indicator" style="--role-color:${characterAccentColor(state.current_role)}">${t('your_turn')} (${t(state.current_role)}) ${timerBadgeHTML()}</div>`;
 
             // Action buttons
             content += '<div class="action-buttons">';
             if (state.can_take_action) {
-                content += `<button id="btn-gold" class="btn-resource">${t('take_2_gold')}</button>`;
-                content += `<button id="btn-draw" class="btn-draw">${t('draw_cards')}</button>`;
+                content += `<button id="btn-gold">${t('take_2_gold')}</button>`;
+                content += `<button id="btn-draw">${t('draw_cards')}</button>`;
             }
             if (state.can_collect_gold) {
-                content += `<button id="btn-collect-gold" class="btn-resource">${t('collect_gold', { count: state.collect_gold_amount })}</button>`;
+                content += `<button id="btn-collect-gold">${t('collect_gold', { count: state.collect_gold_amount })}</button>`;
             }
             if (state.can_use_ability && state.valid_targets && state.valid_targets.length > 0) {
-                content += `<button id="btn-ability" class="btn-secondary">${t('use_ability')}</button>`;
+                content += `<button id="btn-ability">${t('use_ability')}</button>`;
             }
             if (state.can_use_lab) {
-                content += `<button id="btn-lab" class="btn-secondary ${labMode ? 'active' : ''}">${labMode ? t('lab_cancel') : t('lab_btn')}</button>`;
+                content += `<button id="btn-lab" class="${labMode ? 'active' : ''}">${labMode ? t('lab_cancel') : t('lab_btn')}</button>`;
             }
             if (state.can_use_smithy) {
-                content += `<button id="btn-smithy" class="btn-secondary">${t('smithy_btn')}</button>`;
+                content += `<button id="btn-smithy">${t('smithy_btn')}</button>`;
             }
-            content += `<button id="btn-end" class="btn-danger">${t('end_turn')}</button>`;
+            content += `<button id="btn-end">${t('end_turn')}</button>`;
             content += '</div>';
 
             // Ability targets
