@@ -146,7 +146,7 @@
         if (state.characters && state.characters.length > 0) {
             content += `<div class="section">
                 <div class="section-title">${t('your_characters')}</div>
-                <div class="character-list">${state.characters.map(c => `<div class="character-item"><span class="character-name">${t(c)}</span>${characterAbility(c) ? `<span class="character-ability">${characterAbility(c)}</span>` : ''}</div>`).join('')}</div>
+                <div class="character-list">${state.characters.map(c => `<div class="character-item" style="border-left-color:${characterColor(c)}"><span class="character-name" style="color:${characterColor(c)}">${t(c)}</span>${characterAbility(c) ? `<span class="character-ability">${characterAbility(c)}</span>` : ''}</div>`).join('')}</div>
             </div>`;
         }
 
@@ -180,7 +180,7 @@
 
         // Player turn
         if (state.is_my_turn && state.phase === 'PlayerTurn') {
-            content += `<div class="turn-indicator">${t('your_turn')} (${t(state.current_role)}) ${timerBadgeHTML()}</div>`;
+            content += `<div class="turn-indicator" style="--role-color:${characterColor(state.current_role)}">${t('your_turn')} (${t(state.current_role)}) ${timerBadgeHTML()}</div>`;
 
             // Action buttons
             content += '<div class="action-buttons">';

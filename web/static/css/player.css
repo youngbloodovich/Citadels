@@ -105,12 +105,12 @@ body { font-size: 16px; }
 .turn-indicator {
     text-align: center;
     padding: 12px;
-    background: #2d1a00;
-    border: 2px solid #e0a030;
+    border: 2px solid var(--role-color, #e0a030);
     border-radius: 12px;
     font-size: 18px;
     font-weight: bold;
-    color: #e0a030;
+    color: var(--role-color, #e0a030);
+    background: color-mix(in srgb, var(--role-color, #e0a030) 15%, #1a1a2e);
     margin: 12px 0;
 }
 .waiting { text-align: center; padding: 20px; color: #888; font-size: 18px; }

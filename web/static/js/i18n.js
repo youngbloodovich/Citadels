@@ -483,6 +483,9 @@
         { num: 8, name: 'Warlord', css: 'c-military' },
     ];
 
+    var charColorMap = { King: '#c9a227', Bishop: '#4a90d9', Merchant: '#45a049', Warlord: '#d9534f' };
+    window.characterColor = function(name) { return charColorMap[name] || '#9b59b6'; };
+
     window.characterBarHTML = function(state) {
         var phase = state.phase || '';
         if (phase === 'Lobby' || phase === 'DraftSetup' || phase === 'DraftPick' || phase === 'GameOver') return '';
@@ -496,8 +499,8 @@
             else if (c.name === robbed) cls += ' robbed';
             if (c.name === currentRole && (phase === 'PlayerTurn' || phase === 'DrawChoice' || phase === 'Ability')) cls += ' active';
             else if (c.num < callNum) cls += ' done';
-            var prefix = c.name === robbed ? '💰 ' : '';
-            return '<div class="' + cls + '"><span class="char-num">' + c.num + '</span>' + prefix + t(c.name) + '</div>';
+            var suffix = c.name === murdered ? ' ☠' : c.name === robbed ? ' 💰' : '';
+            return '<div class="' + cls + '"><span class="char-num">' + c.num + '</span>' + t(c.name) + suffix + '</div>';
         }).join('') + '</div>';
     };
 
