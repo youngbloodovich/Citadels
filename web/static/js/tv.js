@@ -128,7 +128,7 @@
                 <div class="draft-info">
                     <h2>${t('draft_phase')} - ${t('round')} ${state.round}</h2>
                     ${state.draft_face_up && state.draft_face_up.length > 0 ?
-                        `<div class="face-up">${t('face_up')}: ${state.draft_face_up.map(c => t(c)).join(', ')}</div>` : ''}
+                        `<div class="face-up">${t('face_up')}: ${state.draft_face_up.map(c => `<span class="face-up-char">${t(c)}</span>`).join('')}</div>` : ''}
                     <p>${t('available_chars')}: ${state.draft_available} ${t('characters')}</p>
                     ${state.draft_picker ? `<p style="font-size:24px;margin-top:12px;">${t('picking')}: <strong>${state.draft_picker}</strong> ${timerBadgeHTML()}</p>` : ''}
                 </div>
@@ -146,10 +146,14 @@
 
         app.innerHTML = `
             <div class="tv-header">
-                <h1>${t('citadels')}</h1>
-                <span class="phase-badge">${t(state.phase)} - ${t('round')} ${state.round}</span>
-                <span style="color:#888">${t('deck')}: ${state.deck_size}</span>
-                ${langSwitcherHTML()}
+                <div class="tv-header-top">
+                    <h1>${t('citadels')}</h1>
+                    <span class="phase-badge">${t(state.phase)} — ${t('round')} ${state.round}</span>
+                </div>
+                <div class="tv-header-meta">
+                    <span class="deck-info">${t('deck')}: ${state.deck_size}</span>
+                    ${langSwitcherHTML()}
+                </div>
             </div>
             ${draftHTML}
             ${characterBarHTML(state)}

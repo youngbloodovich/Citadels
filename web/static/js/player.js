@@ -55,13 +55,12 @@
 
     function renderJoinForm(app) {
         app.innerHTML = `
-            <div style="padding:40px 16px;text-align:center;">
-                <h1 style="margin-bottom:24px;">${t('citadels')}</h1>
+            <div class="join-screen">
+                <h1 class="join-title">${t('home_title')}</h1>
                 ${langSwitcherHTML()}
-                <p style="color:#888;margin-bottom:24px;">${t('game_label')}: ${gameID}</p>
-                <input id="name-input" type="text" placeholder="${t('your_name')}" value="${playerName}"
-                    style="width:100%;max-width:300px;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
-                <button id="join-btn">${t('join_game')}</button>
+                <p class="join-game-id">${t('game_label')}: ${gameID}</p>
+                <input id="name-input" class="join-input" type="text" placeholder="${t('your_name')}" value="${playerName}">
+                <button id="join-btn" class="join-btn">${t('join_game')}</button>
             </div>
         `;
         document.getElementById('join-btn').onclick = () => {
@@ -81,17 +80,17 @@
         const me = players.find(p => p.id === playerID);
         const amReady = me ? me.ready : false;
         app.innerHTML = `
-            <div style="padding:20px;text-align:center;">
+            <div class="player-lobby">
                 ${langSwitcherHTML()}
                 <h2>${t('waiting_for_players')}</h2>
-                <div style="margin:20px 0;">
-                    ${players.map(p => `<div class="card" style="display:inline-block;margin:4px;">
-                        ${p.name} ${p.ready ? '✓' : ''}
-                    </div>`).join('')}
+                <div class="player-lobby-players">
+                    ${players.map(p => `<div class="player-lobby-player ${p.ready ? 'ready' : ''}">${p.name} ${p.ready ? '✓' : '...'}</div>`).join('')}
                 </div>
-                <button id="ready-btn">${amReady ? t('not_ready') : t('ready')}</button>
-                ${players.length >= 2 ? '<br><button id="start-btn" style="margin-top:12px;">' + t('start_game') + '</button>' : ''}
-                <br><button id="leave-btn" style="margin-top:12px;background:#555;color:#ccc;">${t('leave_lobby')}</button>
+                <div class="player-lobby-actions">
+                    <button id="ready-btn">${amReady ? t('not_ready') : t('ready')}</button>
+                    ${players.length >= 2 ? '<button id="start-btn" class="btn-success">' + t('start_game') + '</button>' : ''}
+                    <button id="leave-btn" class="btn-danger">${t('leave_lobby')}</button>
+                </div>
             </div>
         `;
         document.getElementById('ready-btn').onclick = () => {
@@ -131,12 +130,14 @@
 
         let content = `
             <div class="player-header">
-                <div class="name">${playerName}</div>
-                ${langSwitcherHTML()}
-                <div class="info">
-                    <span class="gold">${gold} ${t('gold')}</span>
-                    <span>${handSize} ${t('cards')}</span>
-                    <span>${cityScore} ${t('pts')}</span>
+                <div class="player-header-top">
+                    <div class="name">${playerName}</div>
+                    ${langSwitcherHTML()}
+                </div>
+                <div class="player-header-stats">
+                    <span class="stat-pill gold-pill">${gold} ${t('gold')}</span>
+                    <span class="stat-pill">${handSize} ${t('cards')}</span>
+                    <span class="stat-pill">${cityScore} ${t('pts')}</span>
                 </div>
             </div>
             ${characterBarHTML(state)}
@@ -155,7 +156,7 @@
             content += `<div class="section">
                 <div class="section-title">${t('choose_character')} ${timerBadgeHTML()}</div>
                 <div class="draft-choices">
-                    ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}"><div class="draft-choice-name">${t(c)}</div>${characterAbility(c) ? `<div class="draft-choice-ability">${characterAbility(c)}</div>` : ''}</div>`).join('')}
+                    ${state.draft_choices.map((c, i) => `<div class="draft-choice" data-role="${i}" style="--char-color:${characterColor(c)}"><div class="draft-choice-name" style="color:${characterColor(c)}">${t(c)}</div>${characterAbility(c) ? `<div class="draft-choice-ability">${characterAbility(c)}</div>` : ''}</div>`).join('')}
                 </div>
             </div>`;
         } else if (state.phase === 'DraftPick') {
@@ -185,22 +186,22 @@
             // Action buttons
             content += '<div class="action-buttons">';
             if (state.can_take_action) {
-                content += `<button id="btn-gold">${t('take_2_gold')}</button>`;
-                content += `<button id="btn-draw">${t('draw_cards')}</button>`;
+                content += `<button id="btn-gold" class="btn-resource">${t('take_2_gold')}</button>`;
+                content += `<button id="btn-draw" class="btn-draw">${t('draw_cards')}</button>`;
             }
             if (state.can_collect_gold) {
-                content += `<button id="btn-collect-gold">${t('collect_gold', { count: state.collect_gold_amount })}</button>`;
+                content += `<button id="btn-collect-gold" class="btn-resource">${t('collect_gold', { count: state.collect_gold_amount })}</button>`;
             }
             if (state.can_use_ability && state.valid_targets && state.valid_targets.length > 0) {
-                content += `<button id="btn-ability">${t('use_ability')}</button>`;
+                content += `<button id="btn-ability" class="btn-secondary">${t('use_ability')}</button>`;
             }
             if (state.can_use_lab) {
-                content += `<button id="btn-lab" class="${labMode ? 'active' : ''}">${labMode ? t('lab_cancel') : t('lab_btn')}</button>`;
+                content += `<button id="btn-lab" class="btn-secondary ${labMode ? 'active' : ''}">${labMode ? t('lab_cancel') : t('lab_btn')}</button>`;
             }
             if (state.can_use_smithy) {
-                content += `<button id="btn-smithy">${t('smithy_btn')}</button>`;
+                content += `<button id="btn-smithy" class="btn-secondary">${t('smithy_btn')}</button>`;
             }
-            content += `<button id="btn-end">${t('end_turn')}</button>`;
+            content += `<button id="btn-end" class="btn-danger">${t('end_turn')}</button>`;
             content += '</div>';
 
             // Ability targets

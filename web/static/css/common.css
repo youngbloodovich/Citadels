@@ -1,9 +1,14 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #1a1a2e;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-attachment: fixed;
     color: #eee;
 }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
 .container { max-width: 1200px; margin: 0 auto; padding: 16px; }
 h1, h2, h3 { color: #e0a030; }
 button {
@@ -19,6 +24,17 @@ button {
 }
 button:hover { background: #f0b040; }
 button:disabled { background: #555; color: #999; cursor: default; }
+.btn-resource { background: linear-gradient(135deg, #c9a227, #e0a030); color: #1a1a2e; }
+.btn-resource:hover { background: linear-gradient(135deg, #d4ad30, #f0b040); }
+.btn-draw { background: linear-gradient(135deg, #4a90d9, #3a7bc8); color: #fff; }
+.btn-draw:hover { background: linear-gradient(135deg, #5aa0e9, #4a8bd8); }
+.btn-secondary { background: transparent; border: 2px solid #e0a030; color: #e0a030; }
+.btn-secondary:hover { background: rgba(224, 160, 48, 0.1); }
+.btn-secondary.active { background: rgba(224, 160, 48, 0.2); }
+.btn-danger { background: #555; color: #ccc; }
+.btn-danger:hover { background: #666; }
+.btn-success { background: #45a049; color: #fff; }
+.btn-success:hover { background: #4fb853; }
 input {
     padding: 10px;
     border: 2px solid #333;
@@ -34,6 +50,7 @@ input:focus { outline: none; border-color: #e0a030; }
     padding: 16px;
     margin: 8px;
     border: 1px solid #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 .gold { color: #ffd700; }
 .color-noble { background: #c9a227; }
@@ -59,11 +76,11 @@ input:focus { outline: none; border-color: #e0a030; }
     border-left: 5px solid #555;
     text-align: left;
 }
-.district-chip.color-noble    { border-left-color: #c9a227; }
-.district-chip.color-religious { border-left-color: #4a90d9; }
-.district-chip.color-trade    { border-left-color: #45a049; }
-.district-chip.color-military { border-left-color: #d9534f; }
-.district-chip.color-special  { border-left-color: #9b59b6; }
+.district-chip.color-noble    { border-left-color: #c9a227; background: rgba(201, 162, 39, 0.08); }
+.district-chip.color-religious { border-left-color: #4a90d9; background: rgba(74, 144, 217, 0.08); }
+.district-chip.color-trade    { border-left-color: #45a049; background: rgba(69, 160, 73, 0.08); }
+.district-chip.color-military { border-left-color: #d9534f; background: rgba(217, 83, 79, 0.08); }
+.district-chip.color-special  { border-left-color: #9b59b6; background: rgba(155, 89, 182, 0.08); }
 .district-effect {
     display: block;
     font-size: 11px;
