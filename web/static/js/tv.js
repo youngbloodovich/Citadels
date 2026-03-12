@@ -51,7 +51,7 @@
                         <div class="lobby-join-info">
                             <p class="lobby-step"><span class="lobby-step-num">1</span>${t('scan_to_join')}</p>
                             <p class="lobby-step"><span class="lobby-step-num">2</span>${t('or_copy_link')}</p>
-                            <div class="lobby-link-url">${joinUrl}</div>
+                            <a href="${joinUrl}" class="lobby-link-url" target="_blank">${joinUrl}</a>
                             <button id="copy-link-btn" class="lobby-copy-btn">${t('copy_link')}</button>
                         </div>
                     </div>
@@ -72,13 +72,17 @@
         if (copyBtn) copyBtn.onclick = () => copyLink(joinUrl);
         if (!lobbyCopied) {
             lobbyCopied = true;
+            // Auto-copy requires secure context or user gesture; attempt it but don't show feedback if it fails
             setTimeout(() => {
-                copyToClipboard(joinUrl);
-                const b = document.getElementById('copy-link-btn');
-                if (b) {
-                    b.textContent = t('link_copied');
-                    b.classList.add('copied');
-                    setTimeout(() => { b.textContent = t('copy_link'); b.classList.remove('copied'); }, 2000);
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(joinUrl).then(() => {
+                        const b = document.getElementById('copy-link-btn');
+                        if (b) {
+                            b.textContent = t('link_copied');
+                            b.classList.add('copied');
+                            setTimeout(() => { b.textContent = t('copy_link'); b.classList.remove('copied'); }, 2000);
+                        }
+                    }).catch(() => {});
                 }
             }, 500);
         }
@@ -88,13 +92,14 @@
         function fallbackCopy() {
             const ta = document.createElement('textarea');
             ta.value = url;
-            ta.style.cssText = 'position:fixed;opacity:0';
+            ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0';
             document.body.appendChild(ta);
+            ta.focus();
             ta.select();
-            document.execCommand('copy');
+            try { document.execCommand('copy'); } catch(e) {}
             document.body.removeChild(ta);
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
+        if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(url).catch(() => fallbackCopy());
         } else {
             fallbackCopy();

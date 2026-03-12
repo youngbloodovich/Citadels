@@ -104,6 +104,7 @@ body { font-size: 20px; overflow: hidden; }
     flex-shrink: 0;
 }
 .lobby-link-url {
+    display: block;
     font-size: 13px;
     color: #4a90d9;
     word-break: break-all;
@@ -113,6 +114,11 @@ body { font-size: 20px; overflow: hidden; }
     border-radius: 8px;
     text-align: left;
     margin-bottom: 10px;
+    text-decoration: none;
+}
+.lobby-link-url:hover {
+    background: rgba(74, 144, 217, 0.15);
+    border-color: rgba(74, 144, 217, 0.5);
 }
 .lobby-copy-btn {
     padding: 8px 16px;
