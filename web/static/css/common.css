@@ -142,7 +142,7 @@ input:focus { outline: none; border-color: #e0a030; }
     font-weight: bold;
 }
 .char-icon.active {
-    background: #e0a030;
+    background: rgba(255, 255, 255, 0.9);
     color: #1a1a2e;
 }
 .char-icon.done {
@@ -154,8 +154,7 @@ input:focus { outline: none; border-color: #e0a030; }
     text-decoration: line-through;
 }
 .char-icon.robbed {
-    background: rgba(243, 156, 18, 0.2);
-    color: #f39c12;
+    border: 1px dashed #f39c12;
 }
 .char-icon.c-noble    { background: rgba(201, 162, 39, 0.15); color: #c9a227; }
 .char-icon.c-religious { background: rgba(74, 144, 217, 0.15); color: #4a90d9; }

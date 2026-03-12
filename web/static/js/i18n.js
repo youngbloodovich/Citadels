@@ -496,7 +496,8 @@
             else if (c.name === robbed) cls += ' robbed';
             if (c.name === currentRole && (phase === 'PlayerTurn' || phase === 'DrawChoice' || phase === 'Ability')) cls += ' active';
             else if (c.num < callNum) cls += ' done';
-            return '<div class="' + cls + '"><span class="char-num">' + c.num + '</span>' + t(c.name) + '</div>';
+            var prefix = c.name === robbed ? '💰 ' : '';
+            return '<div class="' + cls + '"><span class="char-num">' + c.num + '</span>' + prefix + t(c.name) + '</div>';
         }).join('') + '</div>';
     };
 
