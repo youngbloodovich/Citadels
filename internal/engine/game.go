@@ -602,8 +602,11 @@ type PublicViewData struct {
 	Round           int                    `json:"round"`
 	Players         []PublicPlayerData     `json:"players"`
 	CurrentCall     string                 `json:"current_call,omitempty"`
+	CurrentCallNum  int                    `json:"current_call_num,omitempty"`
 	CurrentTurn     string                 `json:"current_turn,omitempty"`
 	CurrentRole     string                 `json:"current_role,omitempty"`
+	MurderedRole    string                 `json:"murdered_role,omitempty"`
+	RobbedRole      string                 `json:"robbed_role,omitempty"`
 	DraftFaceUp     []string               `json:"draft_face_up,omitempty"`
 	DraftPicker     string                 `json:"draft_picker,omitempty"`
 	DraftAvailable  int                    `json:"draft_available,omitempty"`
@@ -625,12 +628,19 @@ type PublicPlayerData struct {
 
 func (g *Game) PublicView() PublicViewData {
 	pv := PublicViewData{
-		Phase:       g.Phase.String(),
-		Round:       g.Round,
-		CurrentCall: g.CurrentCallRole.String(),
-		CurrentRole: g.CurrentTurnRole.String(),
-		Scores:      g.Scores,
-		DeckSize:    g.Deck.Len(),
+		Phase:        g.Phase.String(),
+		Round:        g.Round,
+		CurrentCall:  g.CurrentCallRole.String(),
+		CurrentCallNum: int(g.CurrentCallRole),
+		CurrentRole:  g.CurrentTurnRole.String(),
+		Scores:       g.Scores,
+		DeckSize:     g.Deck.Len(),
+	}
+	if g.MurderedRole > 0 {
+		pv.MurderedRole = g.MurderedRole.String()
+	}
+	if g.RobbedRole > 0 {
+		pv.RobbedRole = g.RobbedRole.String()
 	}
 
 	if g.CurrentTurnPlayer != "" {

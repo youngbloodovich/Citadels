@@ -141,6 +141,7 @@
                 ${langSwitcherHTML()}
             </div>
             ${draftHTML}
+            ${characterBarHTML(state)}
             ${callHTML}
             <div class="tv-body">
                 <div class="players-grid">

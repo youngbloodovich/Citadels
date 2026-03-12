@@ -470,6 +470,34 @@
         return '';
     };
 
+    var charMeta = [
+        { num: 1, name: 'Assassin', css: '' },
+        { num: 2, name: 'Thief', css: '' },
+        { num: 3, name: 'Magician', css: '' },
+        { num: 4, name: 'King', css: 'c-noble' },
+        { num: 5, name: 'Bishop', css: 'c-religious' },
+        { num: 6, name: 'Merchant', css: 'c-trade' },
+        { num: 7, name: 'Architect', css: '' },
+        { num: 8, name: 'Warlord', css: 'c-military' },
+    ];
+
+    window.characterBarHTML = function(state) {
+        var phase = state.phase || '';
+        if (phase === 'Lobby' || phase === 'DraftSetup' || phase === 'DraftPick' || phase === 'GameOver') return '';
+        var callNum = state.current_call_num || 0;
+        var murdered = state.murdered_role || '';
+        var robbed = state.robbed_role || '';
+        var currentRole = state.current_role || '';
+        return '<div class="char-bar">' + charMeta.map(function(c) {
+            var cls = 'char-icon ' + c.css;
+            if (c.name === murdered) cls += ' murdered';
+            else if (c.name === robbed) cls += ' robbed';
+            if (c.name === currentRole && (phase === 'PlayerTurn' || phase === 'DrawChoice' || phase === 'Ability')) cls += ' active';
+            else if (c.num < callNum) cls += ' done';
+            return '<div class="' + cls + '" title="' + t(c.name) + '">' + c.num + '</div>';
+        }).join('') + '</div>';
+    };
+
     window.bindLangSwitcher = function(onSwitch) {
         document.querySelectorAll('.lang-option').forEach(function(el) {
             el.onclick = function() {

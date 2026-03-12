@@ -139,6 +139,7 @@
                     <span>${cityScore} ${t('pts')}</span>
                 </div>
             </div>
+            ${characterBarHTML(state)}
         `;
 
         // Characters
