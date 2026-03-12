@@ -166,7 +166,7 @@ input:focus { outline: none; border-color: #e0a030; }
     opacity: 0.35;
 }
 .char-icon.murdered {
-    opacity: 0.35;
+    border: 1px dashed #e74c3c;
     text-decoration: line-through;
 }
 .char-icon.robbed {

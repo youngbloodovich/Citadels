@@ -166,7 +166,7 @@
             ${draftHTML}
             <div class="tv-turn-section">
                 ${characterBarHTML(state)}
-                ${state.phase !== 'DraftPick' && state.draft_face_up && state.draft_face_up.length > 0 ?
+                ${state.draft_face_up && state.draft_face_up.length > 0 ?
                     `<div class="face-up-bar">${t('face_up')}: ${state.draft_face_up.map(c => `<span class="face-up-char">${t(c)}</span>`).join('')}</div>` : ''}
                 ${callHTML}
             </div>

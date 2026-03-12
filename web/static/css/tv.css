@@ -1,4 +1,4 @@
-body { font-size: 20px; overflow: hidden; }
+body { font-size: 22px; overflow: hidden; }
 #tv-app { height: 100vh; padding: 20px; display: flex; flex-direction: column; }
 .tv-header {
     display: flex;
@@ -16,7 +16,7 @@ body { font-size: 20px; overflow: hidden; }
     align-items: center;
     width: 100%;
 }
-.tv-header-top h1 { font-size: 32px; }
+.tv-header-top h1 { font-size: 36px; }
 .tv-header-meta {
     display: flex;
     justify-content: space-between;
@@ -24,14 +24,14 @@ body { font-size: 20px; overflow: hidden; }
     width: 100%;
     margin-top: 4px;
 }
-.deck-info { font-size: 14px; color: #666; }
+.deck-info { font-size: 16px; color: #666; }
 .phase-badge {
     padding: 6px 14px;
     border-radius: 16px;
     background: #e0a030;
     color: #1a1a2e;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
 }
 /* Lobby screen */
 .lobby-screen {
@@ -47,17 +47,17 @@ body { font-size: 20px; overflow: hidden; }
     border-radius: 20px;
     padding: 36px 40px;
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     text-align: center;
 }
 .lobby-title {
-    font-size: 2em;
+    font-size: 2.2em;
     letter-spacing: 2px;
     margin-bottom: 4px;
 }
 .lobby-subtitle {
     color: #999;
-    font-size: 16px;
+    font-size: 18px;
 }
 .lobby-divider {
     height: 1px;
@@ -87,25 +87,25 @@ body { font-size: 20px; overflow: hidden; }
     align-items: center;
     gap: 10px;
     color: #ccc;
-    font-size: 15px;
+    font-size: 17px;
     margin-bottom: 12px;
 }
 .lobby-step-num {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: #e0a030;
     color: #1a1a2e;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
     flex-shrink: 0;
 }
 .lobby-link-url {
     display: block;
-    font-size: 13px;
+    font-size: 15px;
     color: #4a90d9;
     word-break: break-all;
     padding: 8px 12px;
@@ -122,7 +122,7 @@ body { font-size: 20px; overflow: hidden; }
 }
 .lobby-copy-btn {
     padding: 8px 16px;
-    font-size: 13px;
+    font-size: 15px;
     cursor: pointer;
     background: #e0a030;
     color: #1a1a2e;
@@ -142,12 +142,12 @@ body { font-size: 20px; overflow: hidden; }
 }
 .lobby-players-label {
     color: #888;
-    font-size: 14px;
+    font-size: 16px;
     margin-bottom: 12px;
 }
 .lobby-empty {
     color: #555;
-    font-size: 15px;
+    font-size: 17px;
     padding: 8px;
 }
 .lobby-footer {
@@ -160,7 +160,7 @@ body { font-size: 20px; overflow: hidden; }
     color: #888;
     border: 1px solid #444;
     padding: 8px 20px;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 8px;
 }
 .lobby-back-btn:hover { color: #ccc; border-color: #666; background: none; }
@@ -177,7 +177,7 @@ body { font-size: 20px; overflow: hidden; }
 }
 .players-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 16px;
     margin: 20px 0;
 }
@@ -192,13 +192,13 @@ body { font-size: 20px; overflow: hidden; }
 }
 .player-card:hover { background: #1a2a4e; }
 .player-card.active { border-color: #e0a030; border-top: 3px solid #e0a030; box-shadow: 0 0 16px rgba(224,160,48,0.25); }
-.player-card .name { font-size: 22px; font-weight: bold; padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid #2a2a3e; }
+.player-card .name { font-size: 26px; font-weight: bold; padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid #2a2a3e; }
 .player-card .crown::before { content: "👑 "; }
 .player-card .stats {
     display: flex;
     gap: 10px;
     margin: 6px 0;
-    font-size: 16px;
+    font-size: 18px;
 }
 .player-card .stats span {
     padding: 2px 8px;
@@ -217,8 +217,8 @@ body { font-size: 20px; overflow: hidden; }
     margin: 6px 0;
     flex-shrink: 0;
 }
-.draft-info h2 { letter-spacing: 1px; }
-.draft-info .face-up { font-size: 18px; margin: 10px 0; }
+.draft-info h2 { letter-spacing: 1px; font-size: 28px; }
+.draft-info .face-up { font-size: 20px; margin: 10px 0; }
 .face-up-char {
     display: inline-block;
     padding: 4px 12px;
@@ -226,7 +226,7 @@ body { font-size: 20px; overflow: hidden; }
     background: rgba(224,160,48,0.1);
     border: 1px solid rgba(224,160,48,0.25);
     border-radius: 12px;
-    font-size: 15px;
+    font-size: 17px;
 }
 .tv-turn-section {
     background: rgba(22, 33, 62, 0.6);
@@ -236,11 +236,13 @@ body { font-size: 20px; overflow: hidden; }
     flex-shrink: 0;
 }
 .tv-turn-section .char-bar { margin: 4px 0; }
-.tv-turn-section .face-up-bar { margin: 4px 0; }
+.tv-turn-section .char-icon { font-size: 15px; padding: 5px 12px; }
+.tv-turn-section .face-up-bar { margin: 4px 0; font-size: 16px; }
 .tv-turn-section .call-banner { margin: 6px 0 0; }
 .call-banner {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     padding: 10px 20px;
     background: color-mix(in srgb, var(--call-color, #9b59b6) 10%, #16213e);
@@ -250,18 +252,18 @@ body { font-size: 20px; overflow: hidden; }
     flex-shrink: 0;
 }
 .call-role {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: bold;
     color: var(--call-color, #9b59b6);
 }
 .call-player {
-    font-size: 20px;
+    font-size: 24px;
     color: #ccc;
 }
 /* TV overrides for scores table */
-.scores-table { font-size: 20px; }
+.scores-table { font-size: 22px; }
 .scores-table th, .scores-table td { padding: 12px 16px; }
-.scores-table .winner-row td { font-size: 24px; }
+.scores-table .winner-row td { font-size: 28px; }
 .lobby-players {
     display: flex;
     flex-wrap: wrap;
@@ -272,7 +274,7 @@ body { font-size: 20px; overflow: hidden; }
     padding: 10px 20px;
     background: #1a1a2e;
     border-radius: 10px;
-    font-size: 17px;
+    font-size: 19px;
     border: 2px solid #333;
 }
 .lobby-player.ready { border-color: #45a049; color: #45a049; }
@@ -292,7 +294,7 @@ body { font-size: 20px; overflow: hidden; }
 
 /* Event log */
 .event-log {
-    width: 320px;
+    width: 350px;
     flex-shrink: 0;
     background: #16213e;
     border-radius: 16px;
@@ -302,7 +304,7 @@ body { font-size: 20px; overflow: hidden; }
     min-height: 0;
 }
 .event-log-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #e0a030;
     margin-bottom: 12px;
@@ -317,8 +319,8 @@ body { font-size: 20px; overflow: hidden; }
     gap: 4px;
 }
 .event-entry {
-    font-size: 14px;
-    padding: 6px 8px;
+    font-size: 16px;
+    padding: 6px 10px;
     border-radius: 6px;
     border-left: 3px solid #555;
     background: rgba(255,255,255,0.03);
