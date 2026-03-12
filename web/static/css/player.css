@@ -30,6 +30,14 @@ body { font-size: 16px; }
     background: rgba(255, 215, 0, 0.1);
     color: #ffd700;
 }
+.stat-pill.cards-pill {
+    background: rgba(120, 190, 197, 0.1);
+    color: #78bec5;
+}
+.stat-pill.pts-pill {
+    background: rgba(232, 180, 248, 0.1);
+    color: #e8b4f8;
+}
 /* Join screen */
 .join-screen {
     display: flex;

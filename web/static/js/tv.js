@@ -142,9 +142,12 @@
 
         let callHTML = '';
         if (state.phase === 'PlayerTurn' || state.phase === 'DrawChoice' || state.phase === 'Ability') {
+            const roleColor = characterAccentColor(state.current_role);
             callHTML = `
-                <div class="call-banner">
-                    ${state.current_role ? t(state.current_role) : ''} ${state.current_turn ? `- ${state.current_turn}` : ''} ${timerBadgeHTML()}
+                <div class="call-banner" style="--call-color:${roleColor}">
+                    <span class="call-role">${state.current_role ? t(state.current_role) : ''}</span>
+                    <span class="call-player">${state.current_turn || ''}</span>
+                    ${timerBadgeHTML()}
                 </div>
             `;
         }
@@ -162,6 +165,8 @@
             </div>
             ${draftHTML}
             ${characterBarHTML(state)}
+            ${state.phase !== 'DraftPick' && state.draft_face_up && state.draft_face_up.length > 0 ?
+                `<div class="face-up-bar">${t('face_up')}: ${state.draft_face_up.map(c => `<span class="face-up-char">${t(c)}</span>`).join('')}</div>` : ''}
             ${callHTML}
             <div class="tv-body">
                 <div class="players-grid">
@@ -191,9 +196,9 @@
             <div class="player-card ${isActive ? 'active' : ''}">
                 <div class="name ${p.has_crown ? 'crown' : ''}">${p.name}</div>
                 <div class="stats">
-                    <span class="gold">${p.gold} ${t('gold')}</span>
-                    <span>${p.hand_size} ${t('cards')}</span>
-                    <span>${cityScore(p)} ${t('pts')}</span>
+                    <span class="stat-gold">${p.gold} ${t('gold')}</span>
+                    <span class="stat-cards">${p.hand_size} ${t('cards')}</span>
+                    <span class="stat-pts">${cityScore(p)} ${t('pts')}</span>
                 </div>
                 ${p.revealed_roles && p.revealed_roles.length > 0 ?
                     `<div style="margin:4px 0;">${p.revealed_roles.map(r => `<span style="color:${characterColor(r)}">${t(r)}</span>`).join(', ')}</div>` : ''}

@@ -136,11 +136,13 @@
                 </div>
                 <div class="player-header-stats">
                     <span class="stat-pill gold-pill">${gold} ${t('gold')}</span>
-                    <span class="stat-pill">${handSize} ${t('cards')}</span>
-                    <span class="stat-pill">${cityScore} ${t('pts')}</span>
+                    <span class="stat-pill cards-pill">${handSize} ${t('cards')}</span>
+                    <span class="stat-pill pts-pill">${cityScore} ${t('pts')}</span>
                 </div>
             </div>
             ${characterBarHTML(state)}
+            ${state.draft_face_up && state.draft_face_up.length > 0 ?
+                `<div class="face-up-bar">${t('face_up')}: ${state.draft_face_up.map(c => `<span class="face-up-char">${t(c)}</span>`).join('')}</div>` : ''}
         `;
 
         // Characters
@@ -150,6 +152,9 @@
                 <div class="character-list">${state.characters.map(c => `<div class="character-item" style="border-left-color:${characterColor(c)}"><span class="character-name" style="color:${characterColor(c)}">${t(c)}</span>${characterAbility(c) ? `<span class="character-ability">${characterAbility(c)}</span>` : ''}</div>`).join('')}</div>
             </div>`;
         }
+
+        // Phase-specific content
+        content += `<div class="section"><div class="section-title">${t('current_phase')}</div></div>`;
 
         // Draft phase
         if (state.phase === 'DraftPick' && state.draft_choices && state.draft_choices.length > 0) {
@@ -693,7 +698,7 @@
                         return `<div class="hand-card ${isActive ? 'selected' : ''}" style="flex-direction:column;align-items:stretch;cursor:default;">
                             <div style="display:flex;justify-content:space-between;align-items:center;">
                                 <span style="font-weight:bold;">${p.name}${p.has_crown ? ' 👑' : ''}</span>
-                                <span style="font-size:13px;color:#aaa;">${p.gold} ${t('gold')} · ${p.hand_size} ${t('cards')} · ${score} ${t('pts')}</span>
+                                <span style="font-size:13px;"><span class="stat-gold">${p.gold} ${t('gold')}</span> · <span class="stat-cards">${p.hand_size} ${t('cards')}</span> · <span class="stat-pts">${score} ${t('pts')}</span></span>
                             </div>
                             ${roles}
                             ${city ? `<div style="margin-top:4px;">${city}</div>` : ''}
