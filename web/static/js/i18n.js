@@ -80,10 +80,11 @@
             'no_game_id': 'No game ID',
 
             // UI — lobby
-            'lobby': 'Lobby',
-            'scan_to_join': 'Scan QR code to enter the lobby!',
-            'or_copy_link': 'Or copy the link and send it to friends',
-            'follow_link': 'Follow the link to join the lobby:',
+            'lobby': 'Waiting Room',
+            'lobby_subtitle': 'Invite players to start the game',
+            'scan_to_join': 'Scan QR code on your phone',
+            'or_copy_link': 'Or send a link to friends',
+            'follow_link': 'Join link:',
             'copy_link': 'Copy Link',
             'link_copied': 'Copied!',
             'game_label': 'Game',
@@ -288,10 +289,11 @@
             'no_game_id': 'Нет ID игры',
 
             // UI — lobby
-            'lobby': 'Лобби',
-            'scan_to_join': 'Отсканируйте QR-код чтобы войти в лобби!',
-            'or_copy_link': 'Или скопируйте ссылку и отправьте друзьям',
-            'follow_link': 'Перейдите по ссылке для входа в лобби:',
+            'lobby': 'Комната ожидания',
+            'lobby_subtitle': 'Пригласите игроков для начала игры',
+            'scan_to_join': 'Отсканируйте QR-код на телефоне',
+            'or_copy_link': 'Или отправьте ссылку друзьям',
+            'follow_link': 'Ссылка для входа:',
             'copy_link': 'Скопировать ссылку',
             'link_copied': 'Скопировано!',
             'game_label': 'Игра',
