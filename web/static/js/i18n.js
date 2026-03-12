@@ -73,7 +73,7 @@
             'leave_lobby': 'Leave',
 
             // UI — common
-            'citadels': 'Citadels',
+            'citadels': 'Citadels Online',
             'game_over': 'Game Over!',
             'gold': 'gold',
             'cards': 'cards',
@@ -116,8 +116,8 @@
             'end_turn': 'End Turn',
             'choose_target': 'Choose target',
             'build_district': 'Build a district (tap to build)',
-            'hand': 'Hand',
-            'city': 'City',
+            'hand': 'My Hand',
+            'city': 'My City',
             'waiting_playing': 'is playing',
             'waiting': 'Waiting...',
             'choose_card_keep': 'Choose a card to keep',
@@ -282,7 +282,7 @@
             'leave_lobby': 'Выйти',
 
             // UI — common
-            'citadels': 'Цитадели',
+            'citadels': 'Цитадели Онлайн',
             'game_over': 'Игра окончена!',
             'gold': 'золото',
             'cards': 'карт',
@@ -325,8 +325,8 @@
             'end_turn': 'Конец хода',
             'choose_target': 'Выберите цель',
             'build_district': 'Построить район (нажмите)',
-            'hand': 'Рука',
-            'city': 'Город',
+            'hand': 'Моя рука',
+            'city': 'Мой город',
             'waiting_playing': 'играет',
             'waiting': 'Ожидание...',
             'choose_card_keep': 'Выберите карту',

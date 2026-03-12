@@ -672,44 +672,46 @@
 
     function renderTable() {
         if (!state || !state.players) return '';
-
-        const phase = state.phase ? t(state.phase) : '';
-        const round = state.round || '';
-        const currentTurn = state.current_turn || '';
-        const statusText = phase + (round ? ' — ' + t('round') + ' ' + round : '') + (currentTurn ? ' — ' + currentTurn : '');
+        let content = '';
 
         const others = state.players.filter(p => p.id !== playerID);
 
-        let cardsHTML = others.map(p => {
-            const isActive = state.current_turn === p.name;
-            const score = (p.city || []).reduce((sum, d) => sum + d.cost, 0);
-            const roles = (p.revealed_roles && p.revealed_roles.length > 0)
-                ? `<div class="mini-roles">${p.revealed_roles.map(r => `<span style="color:${characterColor(r)}">${t(r)}</span>`).join(', ')}</div>`
-                : '';
-            const city = (p.city || []).map(d =>
-                `<span class="district-chip ${colorClass(d.color)}">${t(d.name)} (${d.cost})${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`
-            ).join(' ');
-            return `<div class="mini-card ${isActive ? 'active' : ''}">
-                <div class="mini-name">${p.name}${p.has_crown ? ' 👑' : ''} <span class="mini-stats">${p.gold}g · ${p.hand_size} ${t('cards')} · ${score} ${t('pts')}</span></div>
-                ${roles}
-                ${city ? `<div class="mini-city">${city}</div>` : ''}
+        // Other players section
+        if (others.length > 0) {
+            content += `<div class="section">
+                <div class="section-title">${t('table_title')}</div>
+                <div class="hand-cards">
+                    ${others.map(p => {
+                        const isActive = state.current_turn === p.name;
+                        const score = (p.city || []).reduce((sum, d) => sum + d.cost, 0);
+                        const roles = (p.revealed_roles && p.revealed_roles.length > 0)
+                            ? `<div style="margin-top:4px;font-size:13px;">${p.revealed_roles.map(r => `<span style="color:${characterColor(r)}">${t(r)}</span>`).join(', ')}</div>`
+                            : '';
+                        const city = (p.city || []).map(d =>
+                            `<span class="district-chip ${colorClass(d.color)}">${t(d.name)} (${d.cost})${districtEffect(d.name) ? `<span class="district-effect">${districtEffect(d.name)}</span>` : ''}</span>`
+                        ).join(' ');
+                        return `<div class="hand-card ${isActive ? 'selected' : ''}" style="flex-direction:column;align-items:stretch;cursor:default;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <span style="font-weight:bold;">${p.name}${p.has_crown ? ' 👑' : ''}</span>
+                                <span style="font-size:13px;color:#aaa;">${p.gold} ${t('gold')} · ${p.hand_size} ${t('cards')} · ${score} ${t('pts')}</span>
+                            </div>
+                            ${roles}
+                            ${city ? `<div style="margin-top:4px;">${city}</div>` : ''}
+                        </div>`;
+                    }).join('')}
+                </div>
             </div>`;
-        }).join('');
+        }
 
-        const logHTML = eventLog.length > 0
-            ? `<div class="table-log-title">${t('event_log')}</div><div class="table-log">${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}</div>`
-            : '';
+        // Event log section
+        if (eventLog.length > 0) {
+            content += `<div class="section">
+                <div class="section-title">${t('event_log')}</div>
+                <div class="table-log">${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}</div>
+            </div>`;
+        }
 
-        return `<div class="table-panel">
-            <div class="table-header">
-                <span class="table-label">${t('table_title')}</span>
-                <span class="table-status">${statusText}</span>
-            </div>
-            <div class="table-content">
-                ${cardsHTML}
-                ${logHTML}
-            </div>
-        </div>`;
+        return content;
     }
 
     function timerBadgeHTML() {
