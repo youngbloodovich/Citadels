@@ -211,6 +211,17 @@ body { font-size: 16px; }
 .mini-card .mini-stats { color: #aaa; font-size: 12px; }
 .mini-card .mini-city { font-size: 11px; color: #888; margin-top: 2px; }
 .mini-card .mini-roles { font-size: 12px; }
-.table-log-title { font-size: 13px; font-weight: bold; color: #e0a030; margin-top: 10px; padding-top: 8px; border-top: 1px solid #333; margin-bottom: 6px; }
-.table-log { max-height: 120px; overflow-y: auto; }
-.table-log .event-entry { font-size: 12px; padding: 1px 0; }
+.player-event-log {
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.player-event-log .event-entry {
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border-left: 3px solid #555;
+    background: rgba(255,255,255,0.03);
+}

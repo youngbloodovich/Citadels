@@ -357,7 +357,7 @@
         bindActions();
         bindLangSwitcher(render);
         startTimerCountdown();
-        const logList = document.querySelector('.table-log');
+        const logList = document.getElementById('player-event-log');
         if (logList) logList.scrollTop = logList.scrollHeight;
     }
 
@@ -714,7 +714,9 @@
         if (eventLog.length > 0) {
             content += `<div class="section">
                 <div class="section-title">${t('event_log')}</div>
-                <div class="table-log">${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}</div>
+                <div class="player-event-log" id="player-event-log">
+                    ${eventLog.map(e => `<div class="event-entry ${e.css}">${e.text}</div>`).join('')}
+                </div>
             </div>`;
         }
 

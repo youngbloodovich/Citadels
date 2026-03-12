@@ -117,8 +117,8 @@
             'current_phase': 'Current Phase',
             'choose_target': 'Choose target',
             'build_district': 'Build a district (tap to build)',
-            'hand': 'My Hand',
-            'city': 'My City',
+            'hand': 'Your Hand',
+            'city': 'Your City',
             'waiting_playing': 'is playing',
             'waiting': 'Waiting...',
             'choose_card_keep': 'Choose a card to keep',
@@ -150,7 +150,7 @@
             'exit_game': 'Exit',
 
             // UI — table panel
-            'table_title': 'Table',
+            'table_title': 'Other Players',
 
             // UI — collect gold
             'collect_gold': 'Collect Gold ({count})',
@@ -327,8 +327,8 @@
             'current_phase': 'Текущий ход',
             'choose_target': 'Выберите цель',
             'build_district': 'Построить район (нажмите)',
-            'hand': 'Моя рука',
-            'city': 'Мой город',
+            'hand': 'Ваши карты в руке',
+            'city': 'Ваш город',
             'waiting_playing': 'играет',
             'waiting': 'Ожидание...',
             'choose_card_keep': 'Выберите карту',
@@ -360,7 +360,7 @@
             'exit_game': 'Выйти',
 
             // UI — table panel
-            'table_title': 'Стол',
+            'table_title': 'Другие игроки за столом',
 
             // UI — collect gold
             'collect_gold': 'Собрать золото ({count})',
