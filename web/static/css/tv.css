@@ -228,6 +228,16 @@ body { font-size: 20px; overflow: hidden; }
     border-radius: 12px;
     font-size: 15px;
 }
+.tv-turn-section {
+    background: rgba(22, 33, 62, 0.6);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin: 6px 0;
+    flex-shrink: 0;
+}
+.tv-turn-section .char-bar { margin: 4px 0; }
+.tv-turn-section .face-up-bar { margin: 4px 0; }
+.tv-turn-section .call-banner { margin: 6px 0 0; }
 .call-banner {
     display: flex;
     align-items: center;

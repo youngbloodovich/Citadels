@@ -140,9 +140,6 @@
                     <span class="stat-pill pts-pill">${cityScore} ${t('pts')}</span>
                 </div>
             </div>
-            ${characterBarHTML(state)}
-            ${state.draft_face_up && state.draft_face_up.length > 0 ?
-                `<div class="face-up-bar">${t('face_up')}: ${state.draft_face_up.map(c => `<span class="face-up-char">${t(c)}</span>`).join('')}</div>` : ''}
         `;
 
         // Characters
@@ -153,8 +150,13 @@
             </div>`;
         }
 
-        // Phase-specific content
-        content += `<div class="section"><div class="section-title">${t('current_phase')}</div></div>`;
+        // Current turn section: character bar + face-up + phase content
+        content += `<div class="section"><div class="section-title">${t('current_phase')}</div>`;
+        content += characterBarHTML(state);
+        if (state.draft_face_up && state.draft_face_up.length > 0) {
+            content += `<div class="face-up-bar">${t('face_up')}: ${state.draft_face_up.map(c => `<span class="face-up-char">${t(c)}</span>`).join('')}</div>`;
+        }
+        content += `</div>`;
 
         // Draft phase
         if (state.phase === 'DraftPick' && state.draft_choices && state.draft_choices.length > 0) {
